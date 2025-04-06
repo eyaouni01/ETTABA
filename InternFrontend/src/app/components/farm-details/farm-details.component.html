@@ -1,0 +1,89 @@
+
+
+<div class="container-fluid">
+
+  <button mat-stroked-button class="mt-2 mb-2" (click)="goBack()">Précédent</button>
+
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="card mb-4 mb-xl-0">
+        <div class="card-header">Farm Picture</div>
+        <div class="card-body">
+      <div class="card image-container-main">
+      <img [src]="farm.farmImages[selectedFarm].url" class="evt-image-main" alt="image of the farm">
+    </div>
+      <mat-divider></mat-divider>
+
+      <div class="mt-3">
+      <mat-grid-list cols="3" rowHeight="1:1" gutterSize="10">
+        <mat-grid-tile *ngFor="let file of farm.farmImages;let i=index" style="border: 1px solid #59763c;cursor: pointer" (click)="changeSelection(i)">
+
+          <div class="image-container">
+          <img [src]="file.url" alt="images of the farm" class="evt-image">
+      </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+      </div>
+
+    </div>
+    </div>
+
+    <div class="col-xl-8">
+      <div class="card mb-4">
+        <div class="card-header">Details Ferme</div>
+        <div class="card-body">
+
+      <div class="mt-3 container">
+        <h2>Nom Ferme: {{farm?.name}}</h2>
+        <div class="row border">
+          <div class="col-md-3 mb-3">
+
+            <p>Nombre des Ettabas: {{ettabaslength}}</p>
+          </div>
+          <div class="col-md-3 mb-3">
+
+            <p>Nombre des Ettabas disponibles: {{ettabaslength}}</p>
+          </div>
+          <div class="col-md-3 mb-3">
+
+            <p>Longitude: {{farm?.longitude}}</p>
+          </div>
+          <div class="col-md-3 mb-3">
+
+            <p>Latitude: {{farm?.latitude}}</p>
+          </div>
+
+        </div>
+        <h2>Adresse</h2>
+        <div class="row gx-3 border">
+          <div class="col-md-3 mb-3">
+
+            <p>Region: {{farm?.address.region}}</p>
+          </div>
+          <div class="col-md-3 mb-3">
+
+            <p>Gouvernorat: {{farm?.address.state}}</p>
+          </div>
+          <div class="col-md-3 mb-3">
+            <p>Cité: {{farm?.address.city}}</p>
+          </div>
+
+        </div>
+        <div class="mb-3 txt-style">
+          <p>Description: &nbsp; {{farm?.description}}</p>
+        </div>
+      </div>
+
+      <button class="text-light m-1 subbtn" mat-raised-button (click)="goToEttabas()">Ettabas</button>
+      <button class="text-light m-1 subbtn" mat-raised-button (click)="goToEvents()">Evénements</button>
+      <button class="text-light m-1 subbtn" mat-raised-button (click)="goToAnimals()">Animaux</button>
+
+      <mat-divider></mat-divider>
+
+      <router-outlet></router-outlet>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>

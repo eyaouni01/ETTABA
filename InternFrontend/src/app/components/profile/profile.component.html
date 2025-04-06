@@ -1,0 +1,184 @@
+<div class="container-fluid mt-2" *ngIf="user">
+<div class="row">
+  <div class="col-xl-4">
+    <!-- Profile picture card-->
+    <div class="card mb-4 mb-xl-0">
+      <div class="card-header">Image de Profile</div>
+      <div class="card-body text-center">
+
+        <div class="dropzone"
+             appDrag (files)="fileDrop($event)">
+          <div class="text-center align-content-center d-table-cell">
+            Deposer vos images ici ou <a (click)="selectFile.click()" class="pointer"><b>Parcourir</b></a> pour enregistrer
+          </div>
+        </div>
+        <input hidden type="file" value="select" #selectFile (change)="onFileSelect($event)">
+
+        <div class="mt-5" *ngIf="user.userImage">
+          <div class="row">
+                <div style="position:relative;">
+                    <span class="btn-remove" (click)="removeItem()">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                      </svg>
+                    </span>
+                  <img [src]="user.userImage.url" alt="hoho" height="100px" width="100px">
+                </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-8">
+    <!-- Account details card-->
+    <div class="card mb-4">
+      <div class="card-header">Account Details</div>
+      <div class="card-body">
+        <form [formGroup]="formGroupUser" (ngSubmit)="updateUser()">
+          <!--{{formGroupUser.value | json}}-->
+
+          <div class="row gx-3 mb-3">
+          <!-- Form Group (username)-->
+          <div class="col-md-6">
+            <label class="small mb-1 form-label"
+                   for="inputUsername">Username</label>
+            <input id="inputUsername"
+                   class="form-control"
+                   formControlName="username"
+                   disabled type="text"/>
+
+          </div>
+
+          <!-- Form Group (email address)-->
+          <div class="col-md-6">
+            <label class="small mb-1 form-label" for="inputEmailAddress">Adresse mail </label>
+            <input formControlName="email"
+                   class="form-control"
+                   id="inputEmailAddress"
+                   type="email">
+          </div>
+          </div>
+          <!-- Form Row-->
+          <div class="row gx-3 mb-3">
+            <!-- Form Group (first name)-->
+            <div class="col-md-6">
+              <label class="small mb-1" for="inputFirstName">Prénom</label>
+              <input formControlName="firstname"
+                     class="form-control"
+                     id="inputFirstName"
+                     type="text"
+                     placeholder="Enter your first name">
+            </div>
+            <!-- Form Group (last name)-->
+            <div class="col-md-6">
+              <label class="small mb-1" for="inputLastName">Nom</label>
+              <input formControlName="lastname"
+                     class="form-control"
+                     id="inputLastName"
+                     type="text"
+                     placeholder="Enter your last name">
+            </div>
+          </div>
+
+          <h3>Adresse</h3>
+
+          <div class="border" formGroupName="address">
+          <div class="row gx-3 mb-3">
+            <div class="col-md-4">
+              <label class="small mb-1" for="inputRegion">Region</label>
+              <input class="form-control"
+                     formControlName="region"
+                     id="inputRegion"
+                     type="text"
+                     placeholder="Enter your region">
+            </div>
+            <div class="col-md-4">
+              <label class="small mb-1" for="inputState">Gouvernorat</label>
+              <input class="form-control"
+                     formControlName="state"
+                     id="inputState"
+                     type="text"
+                     placeholder="Enter your state">
+            </div>
+            <div class="col-md-4">
+              <label class="small mb-1" for="inputCity">Cité</label>
+              <input class="form-control"
+                     formControlName="city"
+                     id="inputCity"
+                     type="text"
+                     placeholder="Enter your city">
+            </div>
+
+          </div>
+
+            <div class="row gx-3 mb-3">
+              <div class="col-md-4">
+                <label class="small mb-1" for="inputStreet">Rue</label>
+                <input class="form-control"
+                       formControlName="street"
+                       id="inputStreet"
+                       type="text"
+                       placeholder="Enter your street">
+              </div>
+              <div class="col-md-4">
+              <label class="small mb-1" for="inputPostalCode">Code postale</label>
+              <input class="form-control"
+                     formControlName="postalCode"
+                     id="inputPostalCode"
+                     type="text"
+                     placeholder="Enter your postalCode">
+            </div>
+              <div class="col-md-4">
+                <label class="small mb-1" for="inputHouseNumber">houseNumber</label>
+                <input class="form-control"
+                       formControlName="houseNumber"
+                       id="inputHouseNumber"
+                       type="text"
+                       placeholder="Enter your house Number">
+              </div>
+            </div>
+
+      </div>
+          <!-- Form Row-->
+          <div class="row gx-3 mb-3">
+            <!-- Form Group (phone number)-->
+            <div class="col-md-6">
+              <label class="small mb-1" for="inputPhone">Num tél</label>
+              <input class="form-control"
+                     formControlName="phoneNumber"
+                     id="inputPhone"
+                     type="tel"
+                     placeholder="Enter your phone number">
+            </div>
+            <!-- Form Group (birthday)-->
+            <div class="col-md-6">
+              <label class="small mb-1" for="inputBirthday">Date de naissance</label>
+              <input class="form-control"
+                     formControlName="dob"
+                     id="inputBirthday"
+                     type="date"
+                     placeholder="Enter your birthday">
+            </div>
+          </div>
+          <div class="row gx-3 mb-3">
+
+            <div class="col-md-6">
+            </div>
+
+            <div class="col-md-6">
+              <label class="small mb-1" for="inputBirthday">Date creation compte</label>
+              <input class="form-control"
+                     formControlName="createdAt"
+                     id="inputCreatedAt" disabled
+                     type="date">
+            </div>
+          </div>
+          <!-- Save changes button-->
+          <button class="text-light btnsubmit" mat-raised-button type="submit">Modifier</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

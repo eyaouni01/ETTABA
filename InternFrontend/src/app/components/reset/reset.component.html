@@ -1,0 +1,102 @@
+
+<!-- Section: Design Block -->
+<section class="background-radial-gradient overflow-hidden mb-1">
+
+  <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
+    <div class="row gx-lg-5 align-items-center mb-5">
+
+      <div class="col-lg-6 m-auto position-relative">
+        <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+        <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+
+        <div class="card bg-glass">
+          <div class="card-body px-4 py-5 px-md-5">
+            <h1 class="text-black">Récupération d'un compte</h1>
+
+            <ng-container *ngIf="isValidToken">
+            <form [formGroup]="formGroup" (ngSubmit)="resetPass()">
+              <!-- 2 column grid layout with text inputs for the first and last names -->
+
+
+
+              <!-- Password input -->
+              <div class="form-outline mb-4">
+                <label class="form-label" for="password">Mot de passe</label>
+                <input type="password" id="password" class="form-control" formControlName="password"
+                       [class.valid]="formGroup.get('password').valid && (formGroup.get('password').dirty || formGroup.get('password').touched)"
+                       [class.invalid]="formGroup.get('password').invalid && (formGroup.get('password').dirty || formGroup.get('password').touched)" />
+
+                <div *ngIf="formGroup.get('password').invalid &&
+        formGroup.get('password').errors &&
+        (formGroup.get('password').dirty || formGroup.get('password').touched)">
+                  <small class="text-danger"
+                         *ngIf="formGroup.get('password').hasError('required')">
+                    Ce champ est obligatoire.
+                  </small>
+                  <small class="text-danger"
+                         *ngIf="formGroup.get('password').hasError('minlength')">
+                    Le longeur minimal est {{formGroup.get('password').errors.minlength.requiredLength}} characters.
+                  </small>
+                  <small class="text-danger"
+                         *ngIf="formGroup.get('password').hasError('maxlength')">
+                    Le longeur maximal est {{formGroup.get('password').errors.maxlength.requiredLength}} characters.
+                  </small>
+                </div>
+
+              </div>
+
+
+              <div class="form-outline mb-4">
+                <label class="form-label" for="confirmPassword">Confirmer le mot de passe</label>
+                <input type="password" id="confirmPassword" class="form-control" formControlName="confirmPassword"
+                       [class.is-invalid]="formGroup.errors?.['misMatch']"/>
+                <small class="text-danger" *ngIf="formGroup.errors?.['misMatch']">Les mots de passe sont incompatibles</small>
+              </div>
+
+              <!-- Checkbox -->
+
+              <!-- Submit button -->
+
+              <button type="submit" [disabled]="formGroup.invalid" mat-raised-button style="background-color: #59763c;height: 50px;width: 200px" class="m-auto text-center text-light">
+                Modify
+              </button>
+              <!-- Register buttons -->
+            </form>
+
+            </ng-container>
+            <ng-container *ngIf="!isValidToken">
+            <div class="text-center mt-4 name">Cette page est inaccessible pour les raisons suivants : </div>
+            <br><br>
+            <ul>
+              <li>Il se peut que le lien de récupération de votre mot de passe est invalide.</li><br>
+              <li>Il se peut que le lien de récupération de votre mot de passe a expiré.</li><br>
+              <li>Il se peut que le lien de récupération de votre mot de passe a été déjà utilisé donc il n'existe plus.</li><br>
+              <li>Il se peut que vous n'avez pas envoyé une requête de récupération de votre mot de passe.</li>
+            </ul>
+          </ng-container>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<footer>
+  <div
+    class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 fixed-bottom"  style="background-color: #59763c;">
+    <!-- Copyright -->
+    <div class="text-white m-auto">
+      © 2023. ETTABA Group.
+    </div>
+    <!-- Copyright -->
+
+    <!-- Right -->
+    <!-- Right -->
+  </div>
+</footer>

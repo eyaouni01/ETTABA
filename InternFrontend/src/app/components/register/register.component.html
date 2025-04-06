@@ -1,0 +1,189 @@
+
+<!-- Section: Design Block -->
+<section class="background-radial-gradient overflow-hidden">
+
+  <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
+    <div class="row gx-lg-5 align-items-center mb-5">
+      <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+        <h1 class="my-5 display-5 fw-bold ls-tight text-center" style="color: hsl(218, 81%, 95%)">
+          <img src="assets/images/logo-ettabaw.png" height="230px" width="220px" alt="">
+        </h1>
+        <br>
+
+        <p class="fs-1 text-center text-light mt-lg-3">ETTABA</p>
+      </div>
+
+      <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+        <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+        <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+
+        <div class="card bg-glass">
+          <div class="card-body px-4 py-5 px-md-5">
+            <h1 class="text-black">Créer un compte</h1>
+            <form [formGroup]="formGroup" (ngSubmit)="registerProcess()">
+              <!-- 2 column grid layout with text inputs for the first and last names -->
+              <div class="row">
+
+                <div class="col-md-6 mb-4">
+
+
+                  <div class="form-outline">
+                    <label class="form-label" for="firstname">Prénom</label>
+                    <input type="text" id="firstname" class="form-control" formControlName="firstname"
+                           [class.valid]="formGroup.get('firstname').valid && (formGroup.get('firstname').dirty || formGroup.get('firstname').touched)"
+                           [class.invalid]="formGroup.get('firstname').invalid && (formGroup.get('firstname').dirty || formGroup.get('firstname').touched)"/>
+
+                    <div *ngIf="formGroup.get('firstname').invalid &&
+              formGroup.get('firstname').errors &&
+              (formGroup.get('firstname').dirty || formGroup.get('firstname').touched)">
+                      <small class="text-danger"
+                             *ngIf="formGroup.get('firstname').hasError('required')">
+                        Ce champ est obligatoire.
+                      </small>
+                      <small class="text-danger"
+                             *ngIf="formGroup.get('firstname').hasError('minlength')">
+                        The minimum length for this field is {{formGroup.get('firstname').errors.minlength.requiredLength}} characters.
+                      </small>
+                      <small class="text-danger"
+                             *ngIf="formGroup.get('firstname').hasError('maxlength')">
+                        The maximum length for this field is {{formGroup.get('firstname').errors.maxlength.requiredLength}} characters.
+                      </small>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+
+
+                  <div class="form-outline">
+                    <label class="form-label" for="lastname">Nom</label>
+                    <input type="text" id="lastname" class="form-control" formControlName="lastname"
+                           [class.valid]="formGroup.get('lastname').valid && (formGroup.get('lastname').dirty || formGroup.get('lastname').touched)"
+                           [class.invalid]="formGroup.get('lastname').invalid && (formGroup.get('lastname').dirty || formGroup.get('lastname').touched)"/>
+                    <div *ngIf="formGroup.get('lastname').invalid &&
+              formGroup.get('lastname').errors &&
+              (formGroup.get('lastname').dirty || formGroup.get('lastname').touched)">
+                      <small class="text-danger"
+                             *ngIf="formGroup.get('lastname').hasError('required')">
+                        Ce champ est obligatoire.
+                      </small>
+                      <small class="text-danger"
+                             *ngIf="formGroup.get('lastname').hasError('minlength')">
+                        The minimum length for this field is {{formGroup.get('lastname').errors.minlength.requiredLength}} characters.
+                      </small>
+                      <small class="text-danger"
+                             *ngIf="formGroup.get('lastname').hasError('maxlength')">
+                        The maximum length for this field is {{formGroup.get('lastname').errors.maxlength.requiredLength}} characters.
+                      </small>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+
+              <!-- Email input validation -->
+
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <label class="form-label" for="email">Adresse mail</label>
+                <input type="email" id="email" class="form-control" formControlName="email"
+                       [class.valid]="formGroup.get('email').valid && (formGroup.get('email').dirty || formGroup.get('email').touched)"
+                       [class.invalid]="formGroup.get('email').invalid && (formGroup.get('email').dirty || formGroup.get('email').touched)"/>
+
+                <div *ngIf="formGroup.get('email').invalid &&
+              formGroup.get('email').errors &&
+              (formGroup.get('email').dirty || formGroup.get('email').touched)">
+                  <small class="text-danger"
+                         *ngIf="formGroup.get('email').hasError('required')">
+                    Ce champ est obligatoire.
+                  </small>
+                  <small class="text-danger"
+                         *ngIf="formGroup.get('email').hasError('minlength')">
+                    The minimum length for this field is {{formGroup.get('email').errors.minlength.requiredLength}} characters.
+                  </small>
+                  <small class="text-danger"
+                         *ngIf="formGroup.get('email').hasError('maxlength')">
+                    The maximum length for this field is {{formGroup.get('email').errors.maxlength.requiredLength}} characters.
+                  </small>
+                </div>
+
+              </div>
+
+
+              <!-- Password input validation -->
+
+              <!-- Password input -->
+              <div class="form-outline mb-4">
+                <label class="form-label" for="password">Mot de passe</label>
+                <input type="password" id="password" class="form-control" formControlName="password"
+                       [class.valid]="formGroup.get('password').valid && (formGroup.get('password').dirty || formGroup.get('password').touched)"
+                       [class.invalid]="formGroup.get('password').invalid && (formGroup.get('password').dirty || formGroup.get('password').touched)" />
+
+
+                <div *ngIf="formGroup.get('password').invalid &&
+        formGroup.get('password').errors &&
+        (formGroup.get('password').dirty || formGroup.get('password').touched)">
+                  <small class="text-danger"
+                         *ngIf="formGroup.get('password').hasError('required')">
+                    Ce champ est obligatoire.
+                  </small>
+                  <small class="text-danger"
+                         *ngIf="formGroup.get('password').hasError('minlength')">
+                    The minimum length for this field is {{formGroup.get('password').errors.minlength.requiredLength}} characters.
+                  </small>
+                  <small class="text-danger"
+                         *ngIf="formGroup.get('password').hasError('maxlength')">
+                    The maximum length for this field is {{formGroup.get('password').errors.maxlength.requiredLength}} characters.
+                  </small>
+                </div>
+              </div>
+
+
+              <div class="form-outline mb-4">
+                <label class="form-label" for="confirmPassword">Confirmer le mot de passe</label>
+                <input type="password" id="confirmPassword" class="form-control" formControlName="confirmPassword"
+                [class.is-invalid]="formGroup.errors?.['misMatch']"/>
+                <small class="text-danger" *ngIf="formGroup.errors?.['misMatch']">No matching passwords</small>
+              </div>
+
+              <div class="form-outline mb-4 visually-hidden">
+                <input type="role" id="role" class="form-control" formControlName="role" />
+                <label class="form-label" for="role">role</label>
+              </div>
+
+              <!-- Checkbox -->
+
+              <!-- Submit button -->
+
+              <button type="submit" [disabled]="formGroup.invalid" mat-raised-button style="background-color: #59763c;height: 50px;width: 200px" class="m-auto text-center text-light">
+                Register
+              </button>
+
+              <br>
+              <p>Si vous avez déjà un compte &nbsp; <a routerLink="/login" class="pointer"><b>Se connecter</b></a> </p>
+
+              <!-- Register buttons -->
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Section: Design Block -->
+
+<footer>
+  <div
+    class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 fixed-bottom"  style="background-color: #59763c;">
+    <!-- Copyright -->
+    <div class="text-white m-auto">
+      © 2023. ETTABA Group.
+    </div>
+    <!-- Copyright -->
+
+    <!-- Right -->
+    <!-- Right -->
+  </div>
+</footer>

@@ -1,0 +1,61 @@
+
+
+<div class="container-fluid">
+
+
+  <button mat-stroked-button class="mt-2 mb-2" (click)="goBack()">Précédent</button>
+
+
+
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="card mb-4 mb-xl-0">
+        <div class="card-header">Ettaba Picture</div>
+        <div class="card-body">
+      <div class="card image-container-main">
+        <img src="assets/images/garden.jpg" class="evt-image-main" alt="image of the Ettaba">
+      </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-xl-8">
+
+      <div class="card mb-4">
+        <div class="card-header">Ettaba Details</div>
+        <div class="card-body">
+      <div class="mt-3 container">
+        <div class="row border">
+          <div class="col-md-6 mb-3">
+
+            <p>Date début plantation: {{ettaba?.plantationDate}}</p>
+          </div>
+          <div class="col-md-6 mb-3">
+
+            <p>Date fin plantation: {{ettaba?.readyDate}}</p>
+          </div>
+
+        </div>
+        <div class="row gx-3 border">
+          <div class="col-md-3 mb-3">
+
+            <p>Hauteur: {{ettaba?.height}} m</p>
+          </div>
+          <div class="col-md-3 mb-3">
+
+            <p>Largeur: {{ettaba?.width}} m</p>
+          </div>
+          <div class="col-md-3 mb-3">
+            <p>Prix: {{ettaba?.price}} DT</p>
+          </div>
+
+        </div>
+      </div>
+
+      <app-product [parentData]="ettaba?.id"></app-product>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

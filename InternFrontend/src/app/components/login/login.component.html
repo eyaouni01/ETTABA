@@ -1,0 +1,142 @@
+
+<!-- Section: Design Block -->
+<section class="background-radial-gradient overflow-hidden">
+
+  <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
+    <div class="row gx-lg-5 align-items-center mb-5">
+      <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+        <h1 class="my-5 display-5 fw-bold ls-tight text-center" style="color: hsl(218, 81%, 95%)">
+          <img src="assets/images/logo-ettabaw.png" height="230px" width="220px">
+        </h1>
+        <br>
+
+        <p class="fs-1 text-center text-light mt-lg-3">ETTABA</p>
+      </div>
+
+      <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+        <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+        <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+
+        <div class="card bg-glass">
+          <div class="card-body px-4 py-5 px-md-5">
+            <h1 class="text-black">Login</h1>
+
+            <div class="alert alert-danger" *ngIf="msgerr">
+              {{msgerr}}</div>
+            <form [formGroup]="formGroup" (ngSubmit)="loginProcess()">
+              <!-- 2 column grid layout with text inputs for the first and last names -->
+
+
+
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <label class="form-label" for="email">Adresse mail</label>
+                <input type="email" id="email" class="form-control" formControlName="email"
+                [class.valid]="formGroup.get('email').valid && (formGroup.get('email').dirty || formGroup.get('email').touched)"
+                [class.invalid]="formGroup.get('email').invalid && (formGroup.get('email').dirty || formGroup.get('email').touched)" />
+                <div *ngIf="formGroup.get('email').invalid && formGroup.get('email').errors &&
+                    (formGroup.get('email').dirty || formGroup.get('email').touched)">
+                  <small class="text-danger"
+                         *ngIf="formGroup.get('email').hasError('required')">
+                    Ce champ est obligatoire.
+                  </small>
+                </div>
+              </div>
+
+
+
+
+              <!-- Password input -->
+              <div class="form-outline mb-4">
+                <label class="form-label" for="password">Mot de passe</label>
+                <input type="password" id="password" class="form-control" formControlName="password"
+                [class.valid]="formGroup.get('password').valid && (formGroup.get('password').dirty || formGroup.get('password').touched)"
+                [class.invalid]="formGroup.get('password').invalid && (formGroup.get('password').dirty || formGroup.get('password').touched)" />
+                <div *ngIf="formGroup.get('password').invalid && formGroup.get('password').errors && (formGroup.get('password').dirty || formGroup.get('password').touched)">
+                  <small class="text-danger"
+                         *ngIf="formGroup.get('password').hasError('required')">
+                    Ce champ est obligatoire.
+                  </small>
+                </div>
+              </div>
+
+
+
+              <!-- Checkbox -->
+
+              <!-- Submit button -->
+
+              <button type="submit" [disabled]="formGroup.invalid" mat-raised-button class="m-auto text-center text-light btn-green">
+                Se connecter
+              </button>
+              <br>
+
+              <p>Si vous n'avez pas un compte&nbsp;&nbsp; <a routerLink="/register" class="pointer"><b>Créer un compte</b></a></p>
+
+              <br>
+              <u ><a data-bs-toggle="modal" data-bs-target="#resetModal" class="text-primary pointer" (click)="checkNetworkStatus()">J'ai oublié le mot de passe</a></u>
+
+              <!-- Register buttons -->
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="modal fade" id="resetModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="resetModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="resetModalLabel">Récupération du mot de passe</h2>
+        <button type="button" class="btn-close m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form [formGroup]="formGroupReset" class="p-3 mt-3 form-group">
+
+          <div class="alert alert-danger mt-1" *ngIf="!networkStatus">Il parait que vous ne disposez pas d'un accés réseau!.</div>
+
+          <div class="mb-3 col-md-6 m-auto">
+            <label>Email <span class="text-danger">*</span></label>
+            <input type="email" class="form-control" required
+                   formControlName="email" name="email" id="emailA" autocomplete="off"
+                   [class.is-invalid]="this.formGroupReset.get('email').invalid && this.formGroupReset.get('email').touched"/>
+            <ng-container *ngIf="this.formGroupReset.get('email').errors && (this.formGroupReset.get('email').invalid && this.formGroupReset.get('email').touched)">
+              <small class="text-danger mt-1" *ngIf="this.formGroupReset.get('email').errors?.['required']" >Ce champ est obligatoire!</small>
+              <small class="text-danger mt-1" *ngIf="this.formGroupReset.get('email').errors?.['pattern']" >Email invalide</small>
+            </ng-container>
+
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button mat-raised-button [disabled]="formGroupReset.invalid || !networkStatus" (click)="checkMailandMat()" class="text-light float-end m-1 btn-green" >Send mail
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key" viewBox="0 0 16 16">
+            <path d="M0 8a4 4 0 0 1 7.465-2H14a.5.5 0 0 1 .354.146l1.5 1.5a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0L13 9.207l-.646.647a.5.5 0 0 1-.708 0L11 9.207l-.646.647a.5.5 0 0 1-.708 0L9 9.207l-.646.647A.5.5 0 0 1 8 10h-.535A4 4 0 0 1 0 8zm4-3a3 3 0 1 0 2.712 4.285A.5.5 0 0 1 7.163 9h.63l.853-.854a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.793-.793-1-1h-6.63a.5.5 0 0 1-.451-.285A3 3 0 0 0 4 5z"/>
+            <path d="M4 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+          </svg></button>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+<!-- Section: Design Block -->
+
+<footer>
+  <div
+    class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 fixed-bottom"  style="background-color: #59763c;">
+    <!-- Copyright -->
+    <div class="text-white m-auto">
+      © 2023. ETTABA Group.
+    </div>
+    <!-- Copyright -->
+
+    <!-- Right -->
+    <!-- Right -->
+  </div>
+</footer>

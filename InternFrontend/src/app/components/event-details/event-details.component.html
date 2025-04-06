@@ -1,0 +1,20 @@
+<div class="container-fluid">
+
+
+  <p class="fs-1 text-center mt-lg-3">Event Details</p>
+
+  <h2>Description:</h2>
+  <p>
+    {{data.description}}
+  </p>
+  <mat-divider></mat-divider>
+
+  <h2>Images:</h2>
+<mat-grid-list cols="4" rowHeight="1:1">
+  <mat-grid-tile *ngFor="let file of data.images;let i = index">
+    <div style="position:relative;">
+      <img [src]="file.url" alt="hoho" height="100px" width="100px">
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>
+</div>

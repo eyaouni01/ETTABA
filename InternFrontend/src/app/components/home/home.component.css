@@ -1,0 +1,15 @@
+.active {
+  font-weight: bold;
+}
+
+.content {
+  margin-left: 100px;
+  transition: 0.3s;
+}
+.content.sidebarExpanded {
+  margin-left: 160px;
+}
+
+.nav-banner{
+  background-color: #59763c;
+}

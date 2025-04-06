@@ -1,0 +1,106 @@
+.card-description{
+  white-space: inherit;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 40px;width: 288px
+}
+
+mat-grid-tile{
+  border: 1px solid #eee;
+}
+
+.btn-remove{
+  position: absolute;
+  cursor: pointer;
+  top: -10px;
+  right: -10px;
+  background-color: #d8363a;
+  color: #f2f6fc;
+  border-radius: 50%;
+  width: 20px;
+  height: auto;
+  text-align: center;
+}
+
+.dropzone{
+  height: 100px;
+  min-width: 100px;
+  width: 300px;
+  display: table;
+  background-color: #bac5ba;
+  border: dashed 1px #c5ccd6;
+  border-radius: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pointer{
+  color: #9fc479;
+  cursor: pointer;
+}
+
+.cursor{
+  cursor: pointer;
+}
+
+.cursor:hover{
+  background-color: #cbced1;
+}
+
+.evt-image{
+  max-width: 90%;
+  max-height: 90%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.image-container{
+  position: relative;
+  height: 200px;
+
+}
+
+body{margin-top:20px;
+  background-color:#f2f6fc;
+  color:#69707a;
+}
+.card {
+  box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+}
+.card .card-header {
+  font-weight: 500;
+}
+.card-header:first-child {
+  border-radius: 0.35rem 0.35rem 0 0;
+}
+.card-header {
+  padding: 1rem 1.35rem;
+  margin-bottom: 0;
+  background-color: rgba(33, 40, 50, 0.03);
+  border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+}
+.form-control, .dataTable-input {
+  display: block;
+  width: 100%;
+  padding: 0.875rem 1.125rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1;
+  color: #69707a;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #c5ccd6;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0.35rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+disabled{
+  background-color: #9fc479;
+}
