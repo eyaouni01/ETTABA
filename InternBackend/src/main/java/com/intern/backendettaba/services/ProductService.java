@@ -110,13 +110,33 @@ public class ProductService {
 
 
 
-    public ResponseEntity<Product> addProductToEttabaById(Long id, Product newProduct) {
+   /* public ResponseEntity<Product> addProductToEttabaById(Long id, Product newProduct) {
         Product product=ettabaRepository.findById(id).map(ettaba -> {
             newProduct.setEttaba(ettaba);
             return productRepository.save(newProduct);
         }).orElseThrow(()-> new ResourceNotFoundException("Not found ettaba id = "+id));
 
         return new ResponseEntity<>(product,HttpStatus.CREATED);
+    }*/
+
+    public ResponseEntity<Product> addProductToEttabaById(Long id, Product productRequest) {
+        Product product = ettabaRepository.findById(id).map(ettaba -> {
+            // Utilisation du pattern Creator
+            Product newProduct = ettaba.createProduct(
+                    productRequest.getName(),
+                    productRequest.getBoughtPrice(),
+                    productRequest.getSoldPrice(),
+                    productRequest.getWeight(),
+                    productRequest.getDescription(),
+                    productRequest.getEtat(),
+                    productRequest.getImages()
+
+            );
+
+            return productRepository.save(newProduct);
+        }).orElseThrow(() -> new ResourceNotFoundException("Not found ettaba id = " + id));
+
+        return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
 
     public ResponseEntity<List<Product>> getAllProductsByEttabaId(Long ettabaId){

@@ -35,15 +35,48 @@ public class Farm {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-
     private LocalDate creationDate;
 
-    /*
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "farm")
-    private List<Event> events;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "farm")
-    private List<Ettaba> ettabas;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "farm")
-    private List<Animal> animals;
-    */
+    // Creator pattern methods added by eya ouni
+    public Ettaba createEttaba(LocalDate plantationDate, LocalDate readyDate, Float height, Float width, Double price) {
+        Ettaba ettaba = new Ettaba();
+        ettaba.setPlantationDate(plantationDate);
+        ettaba.setReadyDate(readyDate);
+        ettaba.setHeight(height);
+        ettaba.setWidth(width);
+        ettaba.setPrice(price);
+        ettaba.setFarm(this);
+        ettaba.setCreationDate(LocalDate.now());
+        return ettaba;
+    }
+
+    public Animal createAnimal(String name, String type, Integer age, Float price, String description, Set<Image> images) {
+        Animal animal = new Animal();
+        animal.setName(name);
+        animal.setType(type);
+        animal.setAge(age);
+        animal.setPrice(price);
+        animal.setDescription(description);
+        animal.setImages(images);
+        animal.setFarm(this);
+        animal.setCreationDate(LocalDate.now());
+        return animal;
+    }
+
+    public Event createEvent(String name, Float price, String description,
+                             LocalDate startDate, LocalDate endDate,
+                             Integer numberTickets, Set<Image> images) {
+        Event event = new Event();
+        event.setName(name);
+        event.setPrice(price);
+        event.setDescription(description);
+        event.setStartDate(startDate);
+        event.setEndDate(endDate);
+        event.setNumberTickets(numberTickets);
+        event.setNumberAvailableTickets(numberTickets);
+        event.setImages(images);  // Utiliser la méthode que vous avez ajoutée
+        event.setFarm(this);
+        event.setCreationDate(LocalDate.now());
+        return event;
+    }
 }
