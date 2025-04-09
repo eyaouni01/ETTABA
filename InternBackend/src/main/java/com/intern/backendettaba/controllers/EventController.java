@@ -46,6 +46,11 @@ public class EventController {
         return eventService.getEventByID(id);
     }
 
+    @GetMapping("/event-revenues")
+    public ResponseEntity<Float> getRevenuesEttaba() {
+        return eventService.getEventRevenues();
+    }
+
     @GetMapping("/event")
     public ResponseEntity<List<Event>> list(){
         return eventService.getAllEvents();
@@ -53,6 +58,7 @@ public class EventController {
 
     @PutMapping("/event/{id}")
     public ResponseEntity<Event> update(@PathVariable(name = "id") Long id,@RequestBody Event event){
+
         return eventService.updateEvent(event,id);
     }
 

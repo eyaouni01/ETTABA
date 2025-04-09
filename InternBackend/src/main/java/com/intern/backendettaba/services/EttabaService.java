@@ -1,7 +1,11 @@
 package com.intern.backendettaba.services;
 
+import com.intern.backendettaba.designpattern.revenuestrategy.EttabaRevenue;
+
+import com.intern.backendettaba.designpattern.revenuestrategy.RevenueContext;
 import com.intern.backendettaba.entities.Ettaba;
 import com.intern.backendettaba.entities.Farm;
+import com.intern.backendettaba.interfaces.RevenueStrategy;
 import com.intern.backendettaba.repositories.EttabaRepository;
 import com.intern.backendettaba.repositories.FarmRepository;
 import com.intern.backendettaba.repositories.UserRepository;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -44,21 +49,38 @@ public class EttabaService {
 
 
     public ResponseEntity<Ettaba> getEttabaById(Long id){
-        /*
-        Optional<Ettaba> ettaba = ettabaRepository.findById(id);
-        if (ettaba.isPresent()) return ResponseEntity.ok(ettaba);
-        else return ResponseEntity.notFound().build();
-        */
 
         Ettaba ettaba = ettabaRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        RevenueStrategy strategy = new EttabaRevenue(ettaba);
+        RevenueContext context = new RevenueContext(strategy);
+        float revenu = context.calculer();
+
+
         return new ResponseEntity<>(ettaba,HttpStatus.OK);
 
     }
+    public ResponseEntity<Float> getEttabaRevenues(){
+        float total=0f;
+       List<Ettaba> ettaba = ettabaRepository.findAll();
+       for (Ettaba ettaba1 : ettaba) {
+           RevenueStrategy strategy = new EttabaRevenue(ettaba1);
+           RevenueContext context = new RevenueContext(strategy);
+           float revenu = context.calculer();
+           total+=revenu;
+       }
 
+        return new ResponseEntity<>(total,HttpStatus.OK);
+
+    }
     public ResponseEntity<Ettaba> updateEttaba(Long id, Ettaba updatedEttaba){
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
         }
+        System.out.println("Mise a jour d'ettabeeeeee");
+
+
+
         Ettaba existingEttaba = ettabaRepository.findById(id).orElseThrow(()->new EntityNotFoundException(String.valueOf(id)));
         if(Objects.nonNull(updatedEttaba.getHeight())&& !Objects.equals(existingEttaba.getHeight(),updatedEttaba.getHeight())){
             existingEttaba.setHeight(updatedEttaba.getHeight());

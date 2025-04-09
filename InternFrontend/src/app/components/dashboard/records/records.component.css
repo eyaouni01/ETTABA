@@ -1,79 +1,217 @@
 .widget-container {
   display: flex;
-  align-items: normal;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 10px;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
-.widget-container .widget {
-  width: 325px;
-  height: 175px;
-  background-color: #fff;
-  color: #fff;
-  border-radius: 5px;
-  margin: 10px;
-  box-shadow: 5px 5px 5px #939393;
+
+.widget {
+  width: calc(20% - 12px);
+  height: 180px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   padding: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
-.widget-container .widget.green {
-  background-color: #3f513b;
+
+.widget:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
 }
-.widget-container .widget.yellow {
-  background-color: #ed9e20;
+
+.widget::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+  z-index: 1;
 }
-.widget-container .widget.red {
-  background-color: #7e0505;
+
+.widget.green {
+  background: linear-gradient(135deg, #4b6043 0%, #2d3b29 100%);
+  color: #fff;
 }
-.widget-container .widget.blue {
-  background-color: #609966;
+
+.widget.yellow {
+  background: linear-gradient(135deg, #f3b641 0%, #c97f19 100%);
+  color: #fff;
 }
-@media only screen and (max-width: 1600px) {
-  .widget-container .widget {
-    width: 300px;
-  }
+
+.widget.red {
+  background: linear-gradient(135deg, #a01010 0%, #5e0404 100%);
+  color: #fff;
 }
-@media only screen and (max-width: 1500px) {
-  .widget-container .widget {
-    width: 275px;
-  }
+
+.widget.blue {
+  background: linear-gradient(135deg, #6aaa71 0%, #4d7a54 100%);
+  color: #fff;
 }
+
+/* Style spécial pour le widget du revenu total */
+.widget.blue:last-child {
+  background: linear-gradient(135deg, #2c3e50 0%, #1a2530 100%);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.widget.blue:last-child .icon {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.widget .icon {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.widget .icon svg {
+  width: 35px;
+  height: 35px;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+}
+
+.widget .value {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  overflow: hidden;
+  max-width: calc(100% - 85px);
+}
+
+.widget .value .top {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.widget .value .bottom {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.widget .value h2 {
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.8;
+  margin: 0;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Widget du revenu total - adaptation spéciale */
+.widget.blue:last-child .value .top {
+  font-size: 26px; /* Taille réduite pour éviter la coupure */
+  line-height: 1.2;
+  letter-spacing: -0.5px; /* Espacement négatif pour les grands chiffres */
+}
+
+/* Responsive adjustments */
 @media only screen and (max-width: 1400px) {
-  .widget-container .widget {
-    width: 250px;
+  .widget {
+    width: calc(20% - 12px);
+    height: 170px;
   }
-}
-@media only screen and (max-width: 1200px) {
-  .widget-container .widget {
-    width: 225px;
+  
+  .widget .icon {
+    width: 65px;
+    height: 65px;
   }
-}
-.widget-container .widget .icon {
-  width: 100px;
-  font-size: 60px;
-  text-align: center;
-}
-@media only screen and (max-width: 1200px) {
-  .widget-container .widget .icon {
-    font-size: 45px;
+  
+  .widget .icon svg {
+    width: 32px;
+    height: 32px;
   }
-}
-.widget-container .widget .value {
-  text-align: center;
-  width: 175px;
-}
-.widget-container .widget .value .top {
-  font-size: 30px;
-}
-@media only screen and (max-width: 1200px) {
-  .widget-container .widget .value .top {
+  
+  .widget .value .top {
     font-size: 26px;
   }
+  
+  .widget.blue:last-child .value .top {
+    font-size: 24px;
+  }
 }
-.widget-container .widget .value .bottom {
-  font-size: 20px;
-  margin-top: 10px;
-}
+
 @media only screen and (max-width: 1200px) {
-  .widget-container .widget .value .bottom {
-    font-size: 16px;
+  .widget {
+    width: calc(33.33% - 10px);
+    height: 160px;
+  }
+  
+  .widget .icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .widget .icon svg {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .widget .value .top {
+    font-size: 24px;
+  }
+  
+  .widget .value .bottom {
+    font-size: 13px;
+  }
+  
+  .widget .value h2 {
+    font-size: 12px;
+  }
+  
+  .widget.blue:last-child .value .top {
+    font-size: 22px;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .widget-container {
+    gap: 12px;
+  }
+  
+  .widget {
+    width: calc(50% - 6px);
+    height: 150px;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .widget {
+    width: 100%;
+    margin-bottom: 10px;
   }
 }

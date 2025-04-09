@@ -49,6 +49,11 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    @GetMapping("/product-revenues")
+    public ResponseEntity<Float> getProductRevenue() {
+        return productService.getProductRevenues();
+    }
+
     @PutMapping("/product/{id}")
     public ResponseEntity<Product> update(@PathVariable(name = "id") Long id,@RequestBody Product product){
         return productService.updateProduct(product,id);
@@ -65,7 +70,7 @@ public class ProductController {
     }
     @PostMapping(value = "/ettaba/{id}/product",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Product> addToEttaba(@PathVariable(name = "id") Long id,
-                                               @RequestPart("product") Product product,
+                                                @RequestPart("product") Product product,
                                                @RequestPart("imageFile") MultipartFile[] file){
 
         try {
