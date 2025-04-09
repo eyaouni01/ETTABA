@@ -82,15 +82,51 @@ public class AnimalService {
         }
         return ResponseEntity.notFound().build();
     }
-
-    public ResponseEntity<Animal> addAnimalToFarmById(Long id, Animal newAnimal) {
+//ajout d'un animal sans utlisation du patron grasp creator
+    /*public ResponseEntity<Animal> addAnimalToFarmById(Long id, Animal newAnimal) {
         Animal event=farmRepository.findById(id).map(farm -> {
             newAnimal.setFarm(farm);
             return animalRepository.save(newAnimal);
         }).orElseThrow(()-> new ResourceNotFoundException("Not found farm id = "+id));
 
         return new ResponseEntity<>(event,HttpStatus.CREATED);
-    }
+    }*/
+
+  /*  public ResponseEntity<Animal> addAnimalToFarmById(Long id, Animal animalRequest) {
+        Animal animal = farmRepository.findById(id).map(farm -> {
+            // Utilisation du pattern Creator
+            Animal newAnimal = farm.createAnimal(
+                    animalRequest.getName(),
+                    animalRequest.getType(),
+                    animalRequest.getAge(),
+                    animalRequest.getPrice(),
+                    animalRequest.getDescription(),
+                    animalRequest.getImages()
+            );
+
+            return animalRepository.save(newAnimal);
+        }).orElseThrow(() -> new ResourceNotFoundException("Not found farm id = " + id));
+
+        return new ResponseEntity<>(animal, HttpStatus.CREATED);
+    }*/
+    //implimentation du grasp creator
+  public ResponseEntity<Animal> addAnimalToFarmById(Long id, Animal animalRequest) {
+      Animal animal = farmRepository.findById(id).map(farm -> {
+          // Utilisation du pattern Creator
+          Animal newAnimal = farm.createAnimal(
+                  animalRequest.getName(),
+                  animalRequest.getType(),
+                  animalRequest.getAge(),
+                  animalRequest.getPrice(),
+                  animalRequest.getDescription(),
+                  animalRequest.getImages()
+          );
+
+          return animalRepository.save(newAnimal);
+      }).orElseThrow(() -> new ResourceNotFoundException("Not found farm id = " + id));
+
+      return new ResponseEntity<>(animal, HttpStatus.CREATED);
+  }
 
     public ResponseEntity<List<Animal>> getAllAnimalsByFarmId(Long farmId){
         if(!farmRepository.existsById(farmId)){

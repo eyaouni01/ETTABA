@@ -46,6 +46,15 @@ public class Product  {
     @OnDelete(action = OnDeleteAction.CASCADE)
     Ettaba ettaba;
 
+    public Set<Image> getImages() {
+        return this.productImages;
+    }
+
+    // Ajouter cette méthode pour définir les images
+    public void setImages(Set<Image> images) {
+        this.productImages = images;
+    }
+
 
 
 

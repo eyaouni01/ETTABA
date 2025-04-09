@@ -109,7 +109,7 @@ public class EttabaService {
         }
         else return ResponseEntity.notFound().build();
     }
-
+/*
     public ResponseEntity<Ettaba> addEttabaToFarmById(Long id,Ettaba newEttaba) {
         Ettaba ettaba=farmRepository.findById(id).map(farm -> {
             newEttaba.setFarm(farm);
@@ -117,6 +117,24 @@ public class EttabaService {
         }).orElseThrow(()-> new ResourceNotFoundException("Not found farm id = "+id));
 
         return new ResponseEntity<>(ettaba,HttpStatus.CREATED);
+    }*/
+
+    public ResponseEntity<Ettaba> addEttabaToFarmById(Long id, Ettaba ettabaRequest) {
+
+
+        Ettaba ettaba = farmRepository.findById(id).map(farm -> {
+            // Utilisation du pattern Creator
+            Ettaba newEttaba = farm.createEttaba(
+                    ettabaRequest.getPlantationDate(),
+                    ettabaRequest.getReadyDate(),
+                    ettabaRequest.getHeight(),
+                    ettabaRequest.getWidth(),
+                    ettabaRequest.getPrice()
+            );
+            return ettabaRepository.save(newEttaba);
+        }).orElseThrow(() -> new ResourceNotFoundException("Not found farm id = " + id));
+
+        return new ResponseEntity<>(ettaba, HttpStatus.CREATED);
     }
 
     public ResponseEntity<List<Ettaba>> getAllEttabasByFarmId(Long farmId){
