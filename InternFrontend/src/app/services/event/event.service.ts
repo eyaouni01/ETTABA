@@ -48,4 +48,8 @@ export class EventService {
   public deleteEventsFromFarmById(farmId:number): Observable<Event>{
     return this.http.delete<Event>(`${this.apiServerUrl}/farm/${farmId}/event`);
   }
+
+  public getEventRevenue(): Observable<Number>{
+    return this.http.get<Number>(`${this.apiServerUrl}/event-revenues`);
+  }
 }

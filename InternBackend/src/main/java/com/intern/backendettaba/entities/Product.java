@@ -1,6 +1,7 @@
 package com.intern.backendettaba.entities;
 
 import com.intern.backendettaba.enums.Etat;
+import com.intern.backendettaba.interfaces.RevenueStrategy;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +16,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+public class Product  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,5 +45,8 @@ public class Product {
     @JoinColumn(name = "ettaba_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     Ettaba ettaba;
+
+
+
 
 }

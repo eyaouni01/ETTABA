@@ -1,6 +1,11 @@
 package com.intern.backendettaba.services;
 
+import com.intern.backendettaba.designpattern.revenuestrategy.EttabaRevenue;
+import com.intern.backendettaba.designpattern.revenuestrategy.EventRevenue;
+import com.intern.backendettaba.designpattern.revenuestrategy.RevenueContext;
+import com.intern.backendettaba.entities.Ettaba;
 import com.intern.backendettaba.entities.Event;
+import com.intern.backendettaba.interfaces.RevenueStrategy;
 import com.intern.backendettaba.repositories.EventRepository;
 import com.intern.backendettaba.repositories.FarmRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -42,6 +47,30 @@ public class EventService {
 
     public ResponseEntity<List<Event>> getAllEvents(){
         return ResponseEntity.ok(eventRepository.findAll());
+    }
+
+
+    public ResponseEntity<Float> getEventRevenues(){
+        float total=0f;
+        List<Event> event = eventRepository.findAll();
+        for (Event event1 : event) {
+
+            RevenueStrategy strategy = new EventRevenue(event1);
+            RevenueContext context = new RevenueContext(strategy);
+            float revenu = context.calculer();
+            total+=revenu;
+        }
+         System.out.println("*************total*****************"+total);
+        System.out.println("*************total*****************"+total);
+        System.out.println("*************total*****************"+total);
+        System.out.println("*************total*****************"+total);
+        System.out.println("*************total*****************"+total);
+        System.out.println("*************total*****************"+total);
+        System.out.println("*************total*****************"+total);
+        System.out.println("*************total*****************"+total);
+        System.out.println("*************total*****************"+total);
+        return new ResponseEntity<>(total,HttpStatus.OK);
+
     }
 
     public ResponseEntity<Event> updateEvent(Event newEvent,Long id){

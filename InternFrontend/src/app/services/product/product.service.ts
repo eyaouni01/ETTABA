@@ -48,4 +48,8 @@ export class ProductService {
   public deleteProductsFromEttabaById(ettabaId:number): Observable<Product>{
     return this.http.delete<Product>(`${this.apiServerUrl}/ettaba/${ettabaId}/product`);
   }
+
+  public getProductRevenue(): Observable<Number>{
+    return this.http.get<Number>(`${this.apiServerUrl}/product-revenues`);
+  }
 }

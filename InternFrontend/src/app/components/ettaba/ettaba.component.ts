@@ -91,21 +91,19 @@ export class EttabaComponent implements OnInit {
   }
 
   initForm(){
-    this.formGroupEttaba=this.fb.group(
-      {
-        id: [null],
-        price: [0, [Validators.required,]],
-
-        plantationDate: [null, [Validators.required]],
-
-        readyDate: [null, [Validators.required]],
-
-        height: [0, [Validators.required]],
-
-        width: [0, [Validators.required]],
-
-      })
+    this.formGroupEttaba = this.fb.group({
+      id: [null],
+      price: [0, [Validators.required]],
+      plantationDate: [null, [Validators.required]],
+      readyDate: [null, [Validators.required]],
+      height: [0, [Validators.required]],
+      width: [0, [Validators.required]],
+      creationDate: [null],     // ✅ Ajouté
+      boughtDate: [null] ,
+           // ✅ Ajouté (si utilisé dans le HTML)
+    });
   }
+  
 
   public getEttabas():void{
     this.ettabaService.getEttabas().subscribe(
@@ -218,15 +216,20 @@ export class EttabaComponent implements OnInit {
     }
     if(mode==='edit'){
       this.count=count;
-      this.editing=true
-      this.formGroupEttaba.setValue(ettaba)
+      this.editing=true;
+      let newettaba:any={...ettaba};
+      delete newettaba.user;
+      delete newettaba.farm;
+      this.formGroupEttaba.setValue(newettaba)
       button.setAttribute('data-bs-target','#addModal');
     }
     if(mode==='delete'){
       this.count=count;
       this.deletingAll=false
-
-      this.formGroupEttaba.setValue(ettaba)
+      let newettaba:any={...ettaba};
+      delete newettaba.user;
+      delete newettaba.farm;
+      this.formGroupEttaba.setValue(newettaba)
       button.setAttribute('data-bs-target','#deleteModal');
     }
     if(mode==='deleteAll'){

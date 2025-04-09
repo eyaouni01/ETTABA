@@ -1,7 +1,12 @@
 package com.intern.backendettaba.services;
 
+import com.intern.backendettaba.designpattern.revenuestrategy.EttabaRevenue;
+import com.intern.backendettaba.designpattern.revenuestrategy.ProductRevenue;
+import com.intern.backendettaba.designpattern.revenuestrategy.RevenueContext;
+import com.intern.backendettaba.entities.Ettaba;
 import com.intern.backendettaba.entities.Event;
 import com.intern.backendettaba.entities.Product;
+import com.intern.backendettaba.interfaces.RevenueStrategy;
 import com.intern.backendettaba.repositories.EttabaRepository;
 import com.intern.backendettaba.repositories.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -51,6 +56,20 @@ public class ProductService {
         Product product=productRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         product.setProfit(Math.abs(product.getBoughtPrice()- product.getSoldPrice()));
         return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Float> getProductRevenues(){
+        float total=0f;
+        List<Product> product = productRepository.findAll();
+        for (Product product1 : product) {
+            RevenueStrategy strategy = new ProductRevenue(product1);
+            RevenueContext context = new RevenueContext(strategy);
+            float revenu = context.calculer();
+            total+=revenu;
+        }
+
+        return new ResponseEntity<>(total,HttpStatus.OK);
+
     }
 
     public ResponseEntity<List<Product>> getAllProducts(){

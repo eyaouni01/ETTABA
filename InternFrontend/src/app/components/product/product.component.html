@@ -83,7 +83,7 @@
 
             <ng-container matColumnDef="weight">
               <th mat-header-cell *matHeaderCellDef> Poids </th>
-              <td mat-cell *matCellDef="let element"> {{element.weight}} mg</td>
+              <td mat-cell *matCellDef="let element"> {{element.weight}} Kg</td>
             </ng-container>
 
             <ng-container matColumnDef="edit">
@@ -143,7 +143,7 @@
                   <p>état: {{product?.etat}}</p>
                   <p>Prix d'achat: {{product?.boughtPrice}}DT</p>
                   <p>Prix de vente: {{product?.soldPrice}}DT</p>
-                  <p>Poids: {{product?.weight}} mg</p>
+                  <p>Poids: {{product?.weight}} Kg</p>
                   <p class="card-description">Description: {{product?.description}}</p>
 
                 </mat-card-content>
@@ -243,7 +243,7 @@
 
                 <div class="mb-3">
                   <label for="weight" class="form-label">Poids</label>
-                  <small> (en mg)</small>
+                  <small> (en Kg)</small>
                   <input
                     [class.is-invalid]="formGroupProduct.get('weight').invalid && formGroupProduct.get('weight').touched"
                     type="number" formControlName="weight" name="weight" class="form-control" id="weight">

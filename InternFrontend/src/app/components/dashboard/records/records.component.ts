@@ -21,7 +21,10 @@ import {UserService} from "../../../services/user/user.service";
 })
 export class RecordsComponent implements OnInit {
 
-
+  public ettabarevenue:Number=0;
+  public productrevenue :Number=0;
+  public eventrevenue:Number=0;
+  public totalrevenue:Number=0;
   public farms:Farm[]=[];
   public ettabas: Ettaba[]=[];
   public products: Product[]=[];
@@ -45,7 +48,20 @@ export class RecordsComponent implements OnInit {
     this.getAnimals()
     this.getEvents()
     this.getUsers()
+    this.getEttabasRevenue()
+    this.getEventRevenue()
+    this.getProductRevenue()
+  
   }
+
+
+  public calculerTotal(): void {
+    // Convertir les valeurs de Number à number pour l'addition
+    this.totalrevenue = Number(this.ettabarevenue) + Number(this.eventrevenue) + Number(this.productrevenue);
+    console.log("revuenue totlallllllll",this.totalrevenue)
+   
+  }
+  
 
   public getUsers():void{
     this.userService.getUsers()
@@ -78,12 +94,49 @@ export class RecordsComponent implements OnInit {
         response.forEach(elt=>{
           this.revenues+=elt.price
         })
+      
       },
       (error: HttpErrorResponse)=>{
         alert(error.message);
       }
     )
   }
+
+  public getEttabasRevenue():void{
+    this.ettabaService.getEttabasRevenue().subscribe(
+      (response: Number)=>{
+        this.ettabarevenue=response;
+        
+      },
+      (error: HttpErrorResponse)=>{
+        alert(error.message);
+      }
+    )
+  }
+
+  public getEventRevenue():void{
+    this.eventService.getEventRevenue().subscribe(
+      (response: Number)=>{
+        this.eventrevenue=response;
+        this.totalrevenue = Number(this.ettabarevenue) + Number(this.eventrevenue) + Number(this.productrevenue);
+      },
+      (error: HttpErrorResponse)=>{
+        alert(error.message);
+      }
+    )
+  }
+  public getProductRevenue():void{
+    this.productService.getProductRevenue().subscribe(
+      (response: Number)=>{
+        this.productrevenue=response;
+        
+      },
+      (error: HttpErrorResponse)=>{
+        alert(error.message);
+      }
+    )
+  }
+ 
 
   public getProducts():void{
     this.productService.getProducts()

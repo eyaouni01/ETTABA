@@ -45,4 +45,9 @@ export class EttabaService {
   public deleteEttabasFromFarmById(farmId:number): Observable<Ettaba>{
     return this.http.delete<Ettaba>(`${this.apiServerUrl}/farm/${farmId}/ettaba`);
   }
+
+  public getEttabasRevenue(): Observable<Number>{
+    return this.http.get<Number>(`${this.apiServerUrl}/ettaba-revenues`);
+  }
+
 }

@@ -36,6 +36,11 @@ public class EttabaController {
         return ettabaService.getEttabaById(id);
     }
 
+    @GetMapping("/ettaba-revenues")
+    public ResponseEntity<Float> getRevenues() {
+        return ettabaService.getEttabaRevenues();
+    }
+
     @DeleteMapping("/ettaba/{id}")
     public ResponseEntity<Ettaba> delete(@PathVariable(name = "id") Long id){
         return ettabaService.deleteEttaba(id);
