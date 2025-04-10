@@ -120,6 +120,10 @@ public class EventService {
     public ResponseEntity<Event> addEventToFarmById(Long id, Event eventRequest) {
         Event event = farmRepository.findById(id).map(farm -> {
             // Utilisation du pattern Creator avec les images
+            List<Event> ListeventsByfarm = eventRepository.findByFarmId(farm.getId());
+            System.out.println("listaaaaaaaaaaaaaaaaaaaa"+ ListeventsByfarm.size());
+
+
             Event newEvent = farm.createEvent(
                     eventRequest.getName(),
                     eventRequest.getPrice(),
@@ -127,9 +131,10 @@ public class EventService {
                     eventRequest.getStartDate(),
                     eventRequest.getEndDate(),
                     eventRequest.getNumberTickets(),
-                    eventRequest.getImages()  // Passage des images
+                    eventRequest.getImages() ,
+                    ListeventsByfarm // Passage des images
             );
-
+            newEvent.setFarm(farm);
             return eventRepository.save(newEvent);
         }).orElseThrow(() -> new ResourceNotFoundException("Not found farm id = " + id));
 
