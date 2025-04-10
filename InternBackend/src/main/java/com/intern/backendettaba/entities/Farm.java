@@ -1,11 +1,14 @@
 package com.intern.backendettaba.entities;
 
+import com.sun.tools.jconsole.JConsoleContext;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.Hibernate;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -37,6 +40,11 @@ public class Farm {
 
     private LocalDate creationDate;
 
+    @OneToMany(mappedBy = "farm", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // EAGER au lieu de LAZY
+    private Set<Event> events;
+
+
+
     // Creator pattern methods added by eya ouni
     public Ettaba createEttaba(LocalDate plantationDate, LocalDate readyDate, Float height, Float width, Double price) {
         Ettaba ettaba = new Ettaba();
@@ -65,7 +73,35 @@ public class Farm {
 
     public Event createEvent(String name, Float price, String description,
                              LocalDate startDate, LocalDate endDate,
-                             Integer numberTickets, Set<Image> images) {
+                             Integer numberTickets, Set<Image> images , List<Event> ListeventsByfarm) {
+
+
+        // Vérification de la contrainte de chevauchement
+        if (ListeventsByfarm != null) {
+            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
+            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
+            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
+            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
+            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
+            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
+
+
+
+            for (Event existingEvent : ListeventsByfarm) {
+                boolean chevauchement =
+                        startDate.isBefore(existingEvent.getEndDate()) &&
+                                endDate.isAfter(existingEvent.getStartDate());
+                if (chevauchement) {
+
+
+                    throw new IllegalStateException("Un événement chevauche déjà cette période dans cette ferme.");
+                }
+            }
+        }
+
+
+
+
         Event event = new Event();
         event.setName(name);
         event.setPrice(price);
