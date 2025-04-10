@@ -114,5 +114,8 @@
       }
     }
   },
-  "defaultProject": "FrontendEttaba"
+  "defaultProject": "FrontendEttaba",
+  "cli": {
+    "analytics": "10c41d3f-a09f-4bd2-a209-8072ba5e1670"
+  }
 }
