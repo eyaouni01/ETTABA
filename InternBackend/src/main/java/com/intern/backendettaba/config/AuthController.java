@@ -6,9 +6,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
-
+import com.intern.backendettaba.designpattern.PatternObserver.Subject;
+import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -18,9 +18,10 @@ public class AuthController {
 
     private final UserService userService;
 
-
+    private final Subject userRegistrationSubject;
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody  RegisterRequest request){
+        System.out.println("Subject instance: " + userRegistrationSubject);
         return ResponseEntity.ok(authService.register(request));
     }
 

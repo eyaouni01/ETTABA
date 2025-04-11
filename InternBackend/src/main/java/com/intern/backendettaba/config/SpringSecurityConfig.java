@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-
+import org.springframework.http.HttpMethod;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -39,8 +39,9 @@ public class SpringSecurityConfig {
                 csrf().
                 disable().
                 authorizeHttpRequests()
-                .requestMatchers(
+                  .requestMatchers(
                         "/api/auth/**",
+                          "/api/auth/register",
                         "/v2/api-docs",
                         "/v3/api-docs",
                         "/v3/api-docs/**",
@@ -50,7 +51,9 @@ public class SpringSecurityConfig {
                         "/configuration/security",
                         "/swagger-ui/**",
                         "/webjars/**",
-                        "/swagger-ui.html")
+                        "/swagger-ui.html"
+
+                         )
                 .permitAll()
                 .anyRequest()
                 .authenticated()
