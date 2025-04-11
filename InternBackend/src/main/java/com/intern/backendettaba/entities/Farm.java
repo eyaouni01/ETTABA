@@ -78,12 +78,8 @@ public class Farm {
 
         // Vérification de la contrainte de chevauchement
         if (ListeventsByfarm != null) {
-            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
-            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
-            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
-            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
-            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
-            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
+            System.out.println("nombre des evemenements"+ListeventsByfarm.size());
+
 
 
 
@@ -98,6 +94,18 @@ public class Farm {
                 }
             }
         }
+        /**
+         * OCL Constraint:
+         * context Event
+         * inv PasDEvenementsChevauchants:
+         *   let f : Farm = self.farm in
+         *     f.events->excluding(self)->forAll(e |
+         *       self.endDate <= e.startDate or self.startDate >= e.endDate
+         *     )
+         *
+         * Cette méthode vérifie qu’aucun autre événement de la ferme ne chevauche la période.
+         */
+
 
 
 
