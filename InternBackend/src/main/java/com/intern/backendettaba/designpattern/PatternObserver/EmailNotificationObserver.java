@@ -5,14 +5,18 @@ import org.springframework.stereotype.Component;
 import org.springframework.mail.SimpleMailMessage;
 
 import org.springframework.http.ResponseEntity;
+import com.intern.backendettaba.entities.ConfirmationToken;
+import com.intern.backendettaba.repositories.ConfirmationTokenRepository;
 @Component
 public class EmailNotificationObserver implements Observer {
     private  EmailService emailService; // Injection
+    private  ConfirmationTokenRepository confirmationTokenRepository;
 
 
-    // Injection par constructeur
-    public EmailNotificationObserver(EmailService emailService) {
+    public EmailNotificationObserver(EmailService emailService,
+                                     ConfirmationTokenRepository confirmationTokenRepository) {
         this.emailService = emailService;
+        this.confirmationTokenRepository = confirmationTokenRepository;
     }
 
     @Override
@@ -45,9 +49,14 @@ public class EmailNotificationObserver implements Observer {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(user.getEmail());
         mail.setSubject("Confirmation d'inscription");
+
+
+        ConfirmationToken confirmationToken = confirmationTokenRepository.findByUser(user)
+                .orElseThrow(() -> new IllegalStateException("Token not found for user"));
+
         mail.setText("Bonjour " + user.getFirstName() + ",\n\n"
-                + "Votre compte a été créé avec succès.\n"
-                + "Email: " + user.getEmail() + "\n\n"
+
+                + "To confirm your account, please click here : "   +"http://localhost:8082/confirm-account?token=" + confirmationToken.getConfirmationToken() + "\n\n"
                 + "Cordialement,\nL'équipe Example");
 
         emailService.sendEmail(mail);
@@ -59,10 +68,7 @@ public class EmailNotificationObserver implements Observer {
             ║  Destinataire: %-15s ║
             ╚════════════════════════════════╝
             """.formatted(user.getEmail()));
-
     }
-
-
 
 }
 
