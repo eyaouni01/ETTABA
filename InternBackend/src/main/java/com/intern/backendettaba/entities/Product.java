@@ -1,5 +1,9 @@
 package com.intern.backendettaba.entities;
 
+import com.intern.backendettaba.designpattern.ProductState.InProgressState;
+import com.intern.backendettaba.designpattern.ProductState.ProductState;
+import com.intern.backendettaba.designpattern.ProductState.ReadyState;
+import com.intern.backendettaba.designpattern.ProductState.SeedState;
 import com.intern.backendettaba.enums.Etat;
 import com.intern.backendettaba.interfaces.RevenueStrategy;
 import jakarta.persistence.*;
@@ -16,7 +20,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product  {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,13 +39,12 @@ public class Product  {
     private LocalDate boughtDate;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "product_images",
-            joinColumns = {@JoinColumn(name = "product_id")},inverseJoinColumns = {@JoinColumn(name = "image_id")})
+    @JoinTable(name = "product_images", joinColumns = { @JoinColumn(name = "product_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "image_id") })
     private Set<Image> productImages;
 
-
     @ManyToOne
-    //Adding the name
+    // Adding the name
     @JoinColumn(name = "ettaba_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     Ettaba ettaba;
@@ -55,7 +58,30 @@ public class Product  {
         this.productImages = images;
     }
 
+    @Transient
+    private ProductState currentState;
 
+    public void setCurrentStateFromEnum() {
+        switch (this.etat) {
+            case SEED:
+                this.currentState = new SeedState();
+                break;
+            case INPROGRESS:
+                this.currentState = new InProgressState();
+                break;
+            case READY:
+                this.currentState = new ReadyState();
+                break;
+            default:
+                throw new IllegalStateException("Unknown state: " + this.etat);
+        }
+    }
 
+    public ProductState getCurrentState() {
+        if (this.currentState == null) {
+            setCurrentStateFromEnum();
+        }
+        return this.currentState;
+    }
 
 }
