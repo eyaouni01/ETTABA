@@ -229,31 +229,44 @@ export class ProductComponent implements OnInit {
     return formData
   }
 
-  public onUpdateProduct():void{
-    document.getElementById('close-add-form').click();
-    this.productService.updateProduct(this.formGroupProduct.get('id').value,this.formGroupProduct.value).subscribe(
-      (response:Product)=>{
-        if(this.ettabaId) this.getProductsByEttabaId(this.formGroupProduct.get('id').value)
-        else this.getProducts();
-      },
-      (error:HttpErrorResponse) => {
-        alert(error.message)
+ public onUpdateProduct(): void {
+  document.getElementById('close-add-form')?.click();
+  this.productService.updateProduct(this.formGroupProduct.get('id').value, this.formGroupProduct.value).subscribe(
+    (response: Product) => {
+      if (this.ettabaId) {
+        this.getProductsByEttabaId(this.ettabaId);
+      } else {
+        this.getProducts();
       }
-    )
-  }
+      this.product.productImages = [];
+      this.formGroupProduct.reset();
+    },
+    (error: HttpErrorResponse) => {
+      alert(error.message);
+    }
+  );
+}
 
-  public onDeleteProduct():void{
-    document.getElementById('close-delete-form').click();
-    this.productService.deleteProduct(this.formGroupProduct.get('id').value).subscribe(
-      (response:Product)=>{
-        console.log(response)
-        this.getProductsByEttabaId(this.formGroupProduct.get('id').value);
-      },
-      (error:HttpErrorResponse) => {
-        alert(error.message)
+
+public onDeleteProduct(): void {
+  document.getElementById('close-delete-form')?.click();
+  this.productService.deleteProduct(this.formGroupProduct.get('id').value).subscribe(
+    (response: Product) => {
+      console.log(response);
+      if (this.ettabaId) {
+        this.getProductsByEttabaId(this.ettabaId);
+      } else {
+        this.getProducts();
       }
-    )
-  }
+      this.formGroupProduct.reset();
+      this.product.productImages = [];
+    },
+    (error: HttpErrorResponse) => {
+      alert(error.message);
+    }
+  );
+}
+
 
   public onDeleteAllProductsFromEttaba(id:number):void{
     document.getElementById('close-delete-form').click();
