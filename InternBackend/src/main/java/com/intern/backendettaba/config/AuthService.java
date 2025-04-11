@@ -18,9 +18,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import com.intern.backendettaba.entities.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
-
+import com.intern.backendettaba.designpattern.PatternObserver.Subject;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -31,6 +30,8 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
+
+    private final Subject userRegistrationSubject; // Injection du Subject
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
@@ -47,6 +48,8 @@ public class AuthService {
         var savedUser = userService.saveUser(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
+        // Déclenchez l'Observer ici
+        userRegistrationSubject.notifyObservers("USER_REGISTERED", savedUser);
         saveUserToken(savedUser.getBody(), jwtToken);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)

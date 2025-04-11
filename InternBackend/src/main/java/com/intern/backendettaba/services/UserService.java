@@ -27,10 +27,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-
+import com.intern.backendettaba.designpattern.PatternObserver.Subject;
+import com.intern.backendettaba.designpattern.PatternObserver.EmailNotificationObserver;
+import com.intern.backendettaba.designpattern.PatternObserver.LoggingObserver;
+import jakarta.annotation.PostConstruct; // Import crucial pour @PostConstruct
+import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+
 public class UserService {
     private static final long EXPIRE_TOKEN_AFTER_MINUTES = 30;
 
@@ -40,6 +46,16 @@ public class UserService {
     private final ConfirmationTokenRepository confirmationTokenRepository;
 
     private final EmailService emailService;
+//observer
+    private final Subject userRegistrationSubject; // Injection du Subject
+    private final EmailNotificationObserver emailObserver;
+    private final LoggingObserver loggingObserver;
+    @PostConstruct
+    public void initObservers() {
+        userRegistrationSubject.addObserver(emailObserver);
+        userRegistrationSubject.addObserver(loggingObserver);
+        log.info("Observers initialisés pour UserService");
+    }
 
     @Autowired
     private PasswordEncoder bcryptEncoder;
@@ -58,25 +74,27 @@ public class UserService {
         }
 
         user.setCreatedAt(LocalDate.now());
-
-        userRepository.save(user);
-
+        User savedUser = userRepository.save(user);
         ConfirmationToken confirmationToken = new ConfirmationToken(user);
-
         confirmationTokenRepository.save(confirmationToken);
+        // Notification des observers
+        userRegistrationSubject.notifyObservers("USER_REGISTERED",savedUser);
 
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("Complete Registration!");
-        mailMessage.setText("To confirm your account, please click here : "
-                +"http://localhost:8082/confirm-account?token="+confirmationToken.getConfirmationToken());
-        emailService.sendEmail(mailMessage);
+        // userRepository.save(user);
 
-        System.out.println("Confirmation Token: " + confirmationToken.getConfirmationToken());
+       //SimpleMailMessage mailMessage = new SimpleMailMessage();
+       //mailMessage.setTo(user.getEmail());
+       //mailMessage.setSubject("Complete Registration!");
+       //mailMessage.setText("To confirm your account, please click here : "
+               // +"http://localhost:8082/confirm-account?token="+confirmationToken.getConfirmationToken());
+        //emailService.sendEmail(mailMessage);
+
+        //System.out.println("Confirmation Token: " + confirmationToken.getConfirmationToken());
 
         return new ResponseEntity<>(user,HttpStatus.CREATED);
 
     }
+
 
     public ResponseEntity<?> confirmEmail(String confirmationToken) {
         ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken).get();
