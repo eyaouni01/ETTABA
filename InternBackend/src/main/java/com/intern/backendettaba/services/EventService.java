@@ -108,13 +108,37 @@ public class EventService {
         return ResponseEntity.notFound().build();
     }
 
-    public ResponseEntity<Event> addEventToFarmById(Long id, Event newEvent) {
+   /* public ResponseEntity<Event> addEventToFarmById(Long id, Event newEvent) {
         Event event=farmRepository.findById(id).map(farm -> {
             newEvent.setFarm(farm);
             return eventRepository.save(newEvent);
         }).orElseThrow(()-> new ResourceNotFoundException("Not found farm id = "+id));
 
         return new ResponseEntity<>(event,HttpStatus.CREATED);
+    }*/
+
+    public ResponseEntity<Event> addEventToFarmById(Long id, Event eventRequest) {
+        Event event = farmRepository.findById(id).map(farm -> {
+            // Utilisation du pattern Creator avec les images
+            List<Event> ListeventsByfarm = eventRepository.findByFarmId(farm.getId());
+            System.out.println("listaaaaaaaaaaaaaaaaaaaa"+ ListeventsByfarm.size());
+
+
+            Event newEvent = farm.createEvent(
+                    eventRequest.getName(),
+                    eventRequest.getPrice(),
+                    eventRequest.getDescription(),
+                    eventRequest.getStartDate(),
+                    eventRequest.getEndDate(),
+                    eventRequest.getNumberTickets(),
+                    eventRequest.getImages() ,
+                    ListeventsByfarm // Passage des images
+            );
+            newEvent.setFarm(farm);
+            return eventRepository.save(newEvent);
+        }).orElseThrow(() -> new ResourceNotFoundException("Not found farm id = " + id));
+
+        return new ResponseEntity<>(event, HttpStatus.CREATED);
     }
 
     public ResponseEntity<List<Event>> getAllEventsByFarmId(Long farmId){

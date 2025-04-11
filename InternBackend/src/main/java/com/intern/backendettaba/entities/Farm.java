@@ -1,11 +1,14 @@
 package com.intern.backendettaba.entities;
 
+import com.sun.tools.jconsole.JConsoleContext;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.Hibernate;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -35,15 +38,81 @@ public class Farm {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-
     private LocalDate creationDate;
 
-    /*
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "farm")
-    private List<Event> events;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "farm")
-    private List<Ettaba> ettabas;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "farm")
-    private List<Animal> animals;
-    */
+    @OneToMany(mappedBy = "farm", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // EAGER au lieu de LAZY
+    private Set<Event> events;
+
+
+
+    // Creator pattern methods added by eya ouni
+    public Ettaba createEttaba(LocalDate plantationDate, LocalDate readyDate, Float height, Float width, Double price) {
+        Ettaba ettaba = new Ettaba();
+        ettaba.setPlantationDate(plantationDate);
+        ettaba.setReadyDate(readyDate);
+        ettaba.setHeight(height);
+        ettaba.setWidth(width);
+        ettaba.setPrice(price);
+        ettaba.setFarm(this);
+        ettaba.setCreationDate(LocalDate.now());
+        return ettaba;
+    }
+
+    public Animal createAnimal(String name, String type, Integer age, Float price, String description, Set<Image> images) {
+        Animal animal = new Animal();
+        animal.setName(name);
+        animal.setType(type);
+        animal.setAge(age);
+        animal.setPrice(price);
+        animal.setDescription(description);
+        animal.setImages(images);
+        animal.setFarm(this);
+        animal.setCreationDate(LocalDate.now());
+        return animal;
+    }
+
+    public Event createEvent(String name, Float price, String description,
+                             LocalDate startDate, LocalDate endDate,
+                             Integer numberTickets, Set<Image> images , List<Event> ListeventsByfarm) {
+
+
+        // Vérification de la contrainte de chevauchement
+        if (ListeventsByfarm != null) {
+            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
+            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
+            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
+            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
+            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
+            System.out.println("nombre des evemenes"+ListeventsByfarm.size());
+
+
+
+            for (Event existingEvent : ListeventsByfarm) {
+                boolean chevauchement =
+                        startDate.isBefore(existingEvent.getEndDate()) &&
+                                endDate.isAfter(existingEvent.getStartDate());
+                if (chevauchement) {
+
+
+                    throw new IllegalStateException("Un événement chevauche déjà cette période dans cette ferme.");
+                }
+            }
+        }
+
+
+
+
+        Event event = new Event();
+        event.setName(name);
+        event.setPrice(price);
+        event.setDescription(description);
+        event.setStartDate(startDate);
+        event.setEndDate(endDate);
+        event.setNumberTickets(numberTickets);
+        event.setNumberAvailableTickets(numberTickets);
+        event.setImages(images);  // Utiliser la méthode que vous avez ajoutée
+        event.setFarm(this);
+        event.setCreationDate(LocalDate.now());
+        return event;
+    }
 }

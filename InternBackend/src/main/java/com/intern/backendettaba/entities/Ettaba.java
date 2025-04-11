@@ -6,8 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import com.intern.backendettaba.enums.Etat;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table
@@ -23,25 +25,33 @@ public class Ettaba {
     private Float height;
     @Column(nullable = false)
     private Float width;
-    //private List coordinate;
     private Double price;
 
     private LocalDate creationDate;
     private LocalDate boughtDate;
 
     @ManyToOne
-    //Adding the name
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     User user;
 
     @ManyToOne
-    //Adding the name
     @JoinColumn(name = "farm_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     Farm farm;
 
-    /*
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "ettaba")
-    private List<Product> products;*/
+    // Creator pattern method
+    public Product createProduct(String name, Float boughtPrice, Float soldPrice, Float weight, String description, Etat etat, Set<Image> images) {
+        Product product = new Product();
+        product.setName(name);
+        product.setBoughtPrice(boughtPrice);
+        product.setSoldPrice(soldPrice);
+        product.setWeight(weight);
+        product.setDescription(description);
+        product.setEtat(etat);
+        product.setImages(images);
+        product.setEttaba(this);
+        product.setCreationDate(LocalDate.now());
+        return product;
+    }
 }

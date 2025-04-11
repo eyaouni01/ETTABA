@@ -48,4 +48,14 @@ public class Event {
     @JoinColumn(name = "farm_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     Farm farm;
+
+
+    public Set<Image> getImages() {
+        return this.eventImages;
+    }
+
+    // Ajouter cette méthode pour définir les images
+    public void setImages(Set<Image> images) {
+        this.eventImages = images;
+    }
 }

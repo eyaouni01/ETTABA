@@ -62,4 +62,12 @@ public class Animal {
     @JoinColumn(name = "farm_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     Farm farm;
+    public Set<Image> getImages() {
+        return this.animalImages;
+    }
+
+    // Ajouter cette méthode pour définir les images
+    public void setImages(Set<Image> images) {
+        this.animalImages = images;
+    }
 }

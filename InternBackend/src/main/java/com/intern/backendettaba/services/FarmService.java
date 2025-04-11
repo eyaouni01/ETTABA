@@ -43,7 +43,7 @@ public class FarmService {
 
         Farm farm=farmRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         //if(farm.getNumberEttabas()!=null && farm.getNumberAvailableEttabas()!=null) farm.setNumberSoldEttabas(farm.getNumberEttabas()-farm.getNumberAvailableEttabas());
-
+        farm.getEvents().size(); // force le chargement si LAZY
         return new ResponseEntity<>(farm, HttpStatus.OK);
     }
 
