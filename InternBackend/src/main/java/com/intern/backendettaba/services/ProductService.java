@@ -71,9 +71,17 @@ public class ProductService {
         // State Pattern ici 👇
         // si canUpdate() retourne true on peut modifier sinon rien ne change dans le
         // produit
-        if (!dbProduct.getCurrentState().canUpdate()) {
+        /*if (!dbProduct.getCurrentState().canUpdate()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(null);
+        }*/
+        // 👉mise en commentaire pour appliquer
+        // Grasp Pattern ici 👇 (Low Coupling)
+        // appel à la méthode ajoutée à
+        //Product qui encapsule la méme logique appliquée
+        //dans State Patern(pour l'update)
+        if (!dbProduct.canBeUpdated()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
 
         if (Objects.nonNull(newProduct.getName()) && !Objects.equals(newProduct.getName(), dbProduct.getName())) {
@@ -109,7 +117,16 @@ public class ProductService {
         // si canDelete() retourne true (çà veux dire que le produit est SEED ou
         // INPROGRESS) donc il sera supprimé
         // sinon (produit READY) il ne sera pas supprimé
-        if (!product.getCurrentState().canDelete()) {
+        /*if (!product.getCurrentState().canDelete()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(null);
+        }*/
+        // 👉mise en commentaire pour appliquer
+        // Grasp Pattern ici 👇 (Low Coupling)
+        // appel à la méthode ajoutée à
+        // Product qui encapsule la méme logique appliquée
+        // dans State Patern(pour la suppression)
+        if (!product.canBeDeleted()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(null);
         }
