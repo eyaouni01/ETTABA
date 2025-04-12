@@ -84,4 +84,14 @@ public class Product {
         return this.currentState;
     }
 
+    // Adding Low Coupling (grasp)
+    public boolean canBeUpdated() {
+        return this.getCurrentState().canUpdate();
+    }
+    
+    // Adding Low Coupling (grasp)
+    public boolean canBeDeleted() {
+        return this.getCurrentState().canDelete();
+    }
+
 }
