@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import com.intern.backendettaba.designpattern.PatternObserver.Observer;
 import com.intern.backendettaba.designpattern.PatternObserver.Subject;
 import com.intern.backendettaba.designpattern.PatternObserver.EmailNotificationObserver;
 import com.intern.backendettaba.designpattern.PatternObserver.LoggingObserver;
@@ -37,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 @Slf4j
 @RequiredArgsConstructor
 
-public class UserService {
+public class UserService extends Subject {
     private static final long EXPIRE_TOKEN_AFTER_MINUTES = 30;
 
     private final UserRepository userRepository;
@@ -46,14 +47,14 @@ public class UserService {
     private final ConfirmationTokenRepository confirmationTokenRepository;
 
     private final EmailService emailService;
-//observer
-    private final Subject userRegistrationSubject; // Injection du Subject
+
+
     private final EmailNotificationObserver emailObserver;
     private final LoggingObserver loggingObserver;
     @PostConstruct
     public void initObservers() {
-        userRegistrationSubject.addObserver(emailObserver);
-        userRegistrationSubject.addObserver(loggingObserver);
+        this.addObserver(emailObserver);
+        this.addObserver(loggingObserver);
         log.info("Observers initialisés pour UserService");
     }
 
@@ -78,7 +79,7 @@ public class UserService {
         ConfirmationToken confirmationToken = new ConfirmationToken(user);
         confirmationTokenRepository.save(confirmationToken);
         // Notification des observers
-        userRegistrationSubject.notifyObservers("USER_REGISTERED",savedUser);
+        this.notifyObservers("USER_REGISTERED",savedUser);
 
         // userRepository.save(user);
 
