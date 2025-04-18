@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
-    public class Subject {
+    public abstract class Subject {
         private List<Observer> observers = new ArrayList<>();
 
         public void addObserver(Observer observer) {
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
         }
 
         public void notifyObservers(String eventType, Object data) {
-            //System.out.println("Notification envoyée à " + observers.size() + " observers");
             System.out.println("╔════════════════════════════════╗");
             System.out.println("║  OBSERVER: Email notification  ║");
             System.out.println("║  Envoyé à: {} ║"+ observers.size());

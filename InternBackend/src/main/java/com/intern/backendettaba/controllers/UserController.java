@@ -18,9 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import com.intern.backendettaba.repositories.UserRepository;
-import com.intern.backendettaba.designpattern.PatternObserver.Subject;
-import com.intern.backendettaba.designpattern.PatternObserver.EmailNotificationObserver;
-import com.intern.backendettaba.designpattern.PatternObserver.LoggingObserver;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
@@ -35,16 +32,8 @@ public class UserController {
     private UserRepository userRepository;
 
     private final ImageService imageService;
-    private Subject userRegistrationSubject = new Subject();
-    private final EmailNotificationObserver emailObserver;
-    private final LoggingObserver loggingObserver;
-    // Ajoutez des observateurs au démarrage (ex: via @PostConstruct)
 
-    public void init() {
-        userRegistrationSubject.addObserver(emailObserver);
-        userRegistrationSubject.addObserver(loggingObserver);
-        System.out.println("Observers initialisés avec succès");
-    }
+
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
@@ -55,7 +44,7 @@ public class UserController {
     public User registerUser(@RequestBody @Valid User user) {
         User savedUser = userRepository.save(user);
         // Notifie tous les observateurs
-        userRegistrationSubject.notifyObservers("USER_REGISTERED", savedUser);
+        //userRegistrationSubject.notifyObservers("USER_REGISTERED", savedUser);
        return savedUser;
     }
     @PostMapping("/user")
