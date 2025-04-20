@@ -59,7 +59,7 @@ public class AnimalController {
     public ResponseEntity<List<Animal>> listByFarm(@PathVariable(name = "id") Long id){
         return animalService.getAllAnimalsByFarmId(id);
     }
-    @PostMapping("/farm/{id}/animal")
+    /*@PostMapping("/farm/{id}/animal")
     public ResponseEntity<Animal> addToFarm(@PathVariable(name = "id") Long id,
                                             @RequestPart("animal") Animal animal,
                                             @RequestPart("imageFile") MultipartFile[] file){
@@ -72,7 +72,7 @@ public class AnimalController {
             e.printStackTrace();
             return null;
         }
-    }
+    }*/
     @DeleteMapping("/farm/{id}/animal")
     public ResponseEntity<List<Animal>> deleteAllFromFarm(@PathVariable(name = "id") Long id){
         return animalService.deleteAllAnimalsFromFarmById(id);
@@ -90,5 +90,19 @@ public class AnimalController {
     @DeleteMapping("/user/{id}/animal")
     public ResponseEntity<List<Animal>> deleteAllFromUser(@PathVariable(name = "id") Long id){
         return animalService.deleteAllAnimalsFromUserById(id);
+    }
+    @PostMapping("/farm/{id}/animal/{type}")
+    public ResponseEntity<Animal> addToFarm(@PathVariable(name = "id") Long id,
+                                            @PathVariable(name = "type") String animalType,
+                                            @RequestPart("animal") Animal animal,
+                                            @RequestPart("imageFile") MultipartFile[] file){
+        try {
+            Set<Image> images = imageService.uploadImages(file);
+            animal.setAnimalImages(images);
+            return animalService.addAnimalToFarmById(id, animalType, animal);
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 }

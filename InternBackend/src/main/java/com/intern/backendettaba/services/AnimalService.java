@@ -1,12 +1,13 @@
 package com.intern.backendettaba.services;
 
+import com.intern.backendettaba.designpattern.factory.AnimalFactory;
+import com.intern.backendettaba.designpattern.factory.ChickenFactory;
+import com.intern.backendettaba.designpattern.factory.CowFactory;
 import com.intern.backendettaba.entities.Animal;
-import com.intern.backendettaba.entities.Ettaba;
 import com.intern.backendettaba.repositories.AnimalRepository;
 import com.intern.backendettaba.repositories.FarmRepository;
 import com.intern.backendettaba.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -14,27 +15,39 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
-@RequiredArgsConstructor
+// Supprimez cette annotation qui génère automatiquement un constructeur
+// @RequiredArgsConstructor
 public class AnimalService {
 
     private final UserRepository userRepository;
     private final FarmRepository farmRepository;
     private final AnimalRepository animalRepository;
+    // Factory registry
+    private final Map<String, AnimalFactory> animalFactories = new HashMap<>();
 
-    public ResponseEntity<Animal> saveAnimal(Animal animal){
+    // Gardez uniquement ce constructeur
+    @Autowired
+    public AnimalService(UserRepository userRepository,
+                         FarmRepository farmRepository,
+                         AnimalRepository animalRepository) {
+        this.userRepository = userRepository;
+        this.farmRepository = farmRepository;
+        this.animalRepository = animalRepository;
 
-        //to be modified according to user action
+        // Register factories
+        animalFactories.put("COW", new CowFactory());
+        animalFactories.put("CHICKEN", new ChickenFactory());
+    }
+
+    public ResponseEntity<Animal> saveAnimal(Animal animal) {
+        // Pour être modifié selon l'action de l'utilisateur
         animal.setBoughtDate(LocalDate.now());
-        //
         animal.setCreationDate(LocalDate.now());
         return new ResponseEntity<>(animalRepository.save(animal), HttpStatus.CREATED);
     }
-
     public ResponseEntity<Animal> getAnimalByID(Long id){
         /*
         Optional<Animal> animal = animalRepository.findById(id);
@@ -59,9 +72,9 @@ public class AnimalService {
         if(Objects.nonNull(newAnimal.getName()) && !Objects.equals(newAnimal.getName(),dbAnimal.getName())){
             dbAnimal.setName(newAnimal.getName());
         }
-        if(Objects.nonNull(newAnimal.getType()) && !Objects.equals(newAnimal.getType(),dbAnimal.getType())){
-            dbAnimal.setType(newAnimal.getType());
-        }
+       // if(Objects.nonNull(newAnimal.getType()) && !Objects.equals(newAnimal.getType(),dbAnimal.getType())){
+         //   dbAnimal.setType(newAnimal.getType());
+       // }
         if(Objects.nonNull(newAnimal.getPrice()) && !Objects.equals(newAnimal.getPrice(),dbAnimal.getPrice())){
             dbAnimal.setPrice(newAnimal.getPrice());
         }
@@ -110,12 +123,16 @@ public class AnimalService {
         return new ResponseEntity<>(animal, HttpStatus.CREATED);
     }*/
     //implimentation du grasp creator
-  public ResponseEntity<Animal> addAnimalToFarmById(Long id, Animal animalRequest) {
+  public ResponseEntity<Animal> addAnimalToFarmById(Long id, String animalType, Animal animalRequest) {
+      AnimalFactory factory = animalFactories.get(animalType.toUpperCase());
+      if (factory == null) {
+          throw new IllegalArgumentException("Unknown animal type: " + animalType);
+      }
+
       Animal animal = farmRepository.findById(id).map(farm -> {
-          // Utilisation du pattern Creator
           Animal newAnimal = farm.createAnimal(
+                  factory,
                   animalRequest.getName(),
-                  animalRequest.getType(),
                   animalRequest.getAge(),
                   animalRequest.getPrice(),
                   animalRequest.getDescription(),
@@ -127,7 +144,6 @@ public class AnimalService {
 
       return new ResponseEntity<>(animal, HttpStatus.CREATED);
   }
-
     public ResponseEntity<List<Animal>> getAllAnimalsByFarmId(Long farmId){
         if(!farmRepository.existsById(farmId)){
             throw new ResourceNotFoundException("Not found farm id : "+farmId);
