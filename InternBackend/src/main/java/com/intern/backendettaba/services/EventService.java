@@ -75,6 +75,22 @@ public class EventService {
 
     public ResponseEntity<Event> updateEvent(Event newEvent,Long id){
         Event dbEvent=eventRepository.findById(id).orElseThrow(()-> new EntityNotFoundException(String.valueOf(id)));
+        int ticketsToRemove = dbEvent.getNumberTickets() - newEvent.getNumberTickets();
+        System.out.printf("\n" + """
+            ╔════════════════════════════════╗
+            ║  ticketsToRemove    ║
+            ╠════════════════════════════════╣
+            ║  Destinataire: %-15s ║
+            ╚════════════════════════════════╝
+            """,ticketsToRemove);
+
+        if (ticketsToRemove > 0 && dbEvent.getNumberAvailableTickets() < ticketsToRemove) {
+            throw new IllegalStateException(
+                    "Impossible de réduire le total à " + newEvent.getNumberTickets() +
+                            " : " + (dbEvent.getNumberTickets() - dbEvent.getNumberAvailableTickets()) +
+                            " tickets déjà vendus."
+            );
+        }
         if(Objects.nonNull(newEvent.getName()) && !Objects.equals(newEvent.getName(),dbEvent.getName())){
             dbEvent.setName(newEvent.getName());
         }

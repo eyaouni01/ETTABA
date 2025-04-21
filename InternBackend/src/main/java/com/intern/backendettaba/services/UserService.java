@@ -61,6 +61,7 @@ public class UserService extends Subject {
     @Autowired
     private PasswordEncoder bcryptEncoder;
 
+
     public ResponseEntity<User> saveUser(@RequestBody User user){
 
         log.info("Saving new user with email {}",user.getEmail());
@@ -155,6 +156,7 @@ public class UserService extends Subject {
             throw new IllegalArgumentException(
                     "ID cannot be null");
         }
+
         User existingUser = userRepository.findById(id).orElseThrow(()->new EntityNotFoundException(String.valueOf(id)));
 
         if(Objects.nonNull(updatedUser.getEmail()) && !Objects.equals(updatedUser.getEmail(),existingUser.getEmail())){
