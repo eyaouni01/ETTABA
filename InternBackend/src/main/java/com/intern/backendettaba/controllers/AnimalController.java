@@ -1,94 +1,102 @@
 package com.intern.backendettaba.controllers;
 
-import com.intern.backendettaba.entities.*;
 import com.intern.backendettaba.entities.Animal;
+import com.intern.backendettaba.entities.Chicken;
+import com.intern.backendettaba.entities.Cow;
 import com.intern.backendettaba.services.AnimalService;
-import com.intern.backendettaba.services.ImageService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
-@RequiredArgsConstructor
 public class AnimalController {
+
     private final AnimalService animalService;
 
-    private final ImageService imageService;
-
-    @PostMapping(value = "/animal",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Animal> add(@RequestPart("animal") Animal animal,
-                                       @RequestPart("imageFile") MultipartFile[] file){
-        try {
-            Set<Image> images=imageService.uploadImages(file);
-            animal.setAnimalImages(images);
-            return animalService.saveAnimal(animal);
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
+    @Autowired
+    public AnimalController(AnimalService animalService) {
+        this.animalService = animalService;
     }
 
-    @GetMapping("/animal/{id}")
-    public ResponseEntity<Animal> get(@PathVariable(name = "id") Long id){
+    @PostMapping("/animals")
+    public ResponseEntity<Animal> addAnimal(@RequestBody Animal animal) {
+        return animalService.saveAnimal(animal);
+    }
+
+    @GetMapping("/animals/{id}")
+    public ResponseEntity<Animal> getAnimal(@PathVariable("id") Long id) {
         return animalService.getAnimalByID(id);
     }
 
-    @GetMapping("/animal")
-    public ResponseEntity<List<Animal>> list(){
+    @GetMapping("/animals")
+    public ResponseEntity<List<Animal>> getAllAnimals() {
         return animalService.getAllAnimals();
     }
 
-    @PutMapping("/animal/{id}")
-    public ResponseEntity<Animal> update(@PathVariable(name = "id") Long id,@RequestBody Animal animal){
-        return animalService.updateAnimal(animal,id);
+    @PutMapping("/animals/{id}")
+    public ResponseEntity<Animal> updateAnimal(@PathVariable("id") Long id, @RequestBody Animal animal) {
+        return animalService.updateAnimal(animal, id);
     }
 
-    @DeleteMapping("/animal/{id}")
-    public ResponseEntity<Animal> delete(@PathVariable(name = "id") Long id){
+    @DeleteMapping("/animals/{id}")
+    public ResponseEntity<Animal> deleteAnimal(@PathVariable("id") Long id) {
         return animalService.deleteAnimal(id);
     }
 
-    @GetMapping("/farm/{id}/animal")
-    public ResponseEntity<List<Animal>> listByFarm(@PathVariable(name = "id") Long id){
-        return animalService.getAllAnimalsByFarmId(id);
-    }
-    @PostMapping("/farm/{id}/animal")
-    public ResponseEntity<Animal> addToFarm(@PathVariable(name = "id") Long id,
-                                            @RequestPart("animal") Animal animal,
-                                            @RequestPart("imageFile") MultipartFile[] file){
-
-        try {
-            Set<Image> images=imageService.uploadImages(file);
-            animal.setAnimalImages(images);
-            return animalService.addAnimalToFarmById(id,animal);
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
-    }
-    @DeleteMapping("/farm/{id}/animal")
-    public ResponseEntity<List<Animal>> deleteAllFromFarm(@PathVariable(name = "id") Long id){
-        return animalService.deleteAllAnimalsFromFarmById(id);
+    // Endpoint générique pour ajouter un animal à une ferme
+    @PostMapping("/farms/{farmId}/animals/{animalType}")
+    public ResponseEntity<Animal> addAnimalToFarm(
+            @PathVariable("farmId") Long farmId,
+            @PathVariable("animalType") String animalType,
+            @RequestBody Animal animal) {
+        return animalService.addAnimalToFarmById(farmId, animalType, animal);
     }
 
-    @GetMapping("/user/{id}/animal")
-    public ResponseEntity<List<Animal>> listByUser(@PathVariable(name = "id") Long id){
-        return animalService.getAllAnimalsByUserId(id);
+    // Endpoint spécifique pour ajouter une vache à une ferme
+    @PostMapping("/farms/{farmId}/cows")
+    public ResponseEntity<Cow> addCowToFarm(
+            @PathVariable("farmId") Long farmId,
+            @RequestBody Cow cow) {
+        return animalService.addCowToFarm(farmId, cow);
     }
-    @PostMapping("/user/{id}/animal")
-    public ResponseEntity<Animal> addToUser(@PathVariable(name = "id") Long id,
-                                            @RequestBody Animal animal){
-        return animalService.addAnimalToUserById(id,animal);
+
+    // Endpoint spécifique pour ajouter un poulet à une ferme
+    @PostMapping("/farms/{farmId}/chickens")
+    public ResponseEntity<Chicken> addChickenToFarm(
+            @PathVariable("farmId") Long farmId,
+            @RequestBody Chicken chicken) {
+        return animalService.addChickenToFarm(farmId, chicken);
     }
-    @DeleteMapping("/user/{id}/animal")
-    public ResponseEntity<List<Animal>> deleteAllFromUser(@PathVariable(name = "id") Long id){
-        return animalService.deleteAllAnimalsFromUserById(id);
+
+    @GetMapping("/farms/{farmId}/animals")
+    public ResponseEntity<List<Animal>> getAllAnimalsByFarm(@PathVariable("farmId") Long farmId) {
+        return animalService.getAllAnimalsByFarmId(farmId);
+    }
+
+    @DeleteMapping("/farms/{farmId}/animals")
+    public ResponseEntity<List<Animal>> deleteAllAnimalsFromFarm(@PathVariable("farmId") Long farmId) {
+        return animalService.deleteAllAnimalsFromFarmById(farmId);
+    }
+
+    // Endpoint pour ajouter un animal à un utilisateur
+    @PostMapping("/users/{userId}/animals/{animalType}")
+    public ResponseEntity<Animal> addAnimalToUser(
+            @PathVariable("userId") Long userId,
+            @PathVariable("animalType") String animalType,
+            @RequestBody Animal animal) {
+        return animalService.addAnimalToUserById(userId, animalType, animal);
+    }
+
+    @GetMapping("/users/{userId}/animals")
+    public ResponseEntity<List<Animal>> getAllAnimalsByUser(@PathVariable("userId") Long userId) {
+        return animalService.getAllAnimalsByUserId(userId);
+    }
+
+    @DeleteMapping("/users/{userId}/animals")
+    public ResponseEntity<List<Animal>> deleteAllAnimalsFromUser(@PathVariable("userId") Long userId) {
+        return animalService.deleteAllAnimalsFromUserById(userId);
     }
 }

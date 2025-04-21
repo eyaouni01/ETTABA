@@ -1,7 +1,6 @@
 package com.intern.backendettaba.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
@@ -13,10 +12,10 @@ import java.util.Set;
 @Entity
 @Table
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class Animal {
-
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "animal_type")
+public abstract class Animal {
     @Id
     @SequenceGenerator(
             name = "animal_sequence",
@@ -29,17 +28,19 @@ public class Animal {
     )
     @Column(updatable = false)
     private Long id;
+
     private String name;
 
-    private String type;
     @Column(
             columnDefinition = "TEXT"
     )
     private String description;
+
     @Column(
             nullable = false
     )
     private Integer age;
+
     @Column(nullable = false)
     private Float price;
 
@@ -48,26 +49,28 @@ public class Animal {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "animal_images",
-            joinColumns = {@JoinColumn(name = "animal_id")},inverseJoinColumns = {@JoinColumn(name = "image_id")})
+            joinColumns = {@JoinColumn(name = "animal_id")},
+            inverseJoinColumns = {@JoinColumn(name = "image_id")})
     private Set<Image> animalImages;
 
     @ManyToOne
-    //Adding the name
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     User user;
 
     @ManyToOne
-    //Adding the name
     @JoinColumn(name = "farm_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     Farm farm;
+
     public Set<Image> getImages() {
         return this.animalImages;
     }
 
-    // Ajouter cette méthode pour définir les images
     public void setImages(Set<Image> images) {
         this.animalImages = images;
     }
+
+    // Abstract method that each animal type must implement
+    public abstract float calculateFeedingCost();
 }

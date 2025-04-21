@@ -58,17 +58,39 @@ public class Farm {
         return ettaba;
     }
 
-    public Animal createAnimal(String name, String type, Integer age, Float price, String description, Set<Image> images) {
-        Animal animal = new Animal();
-        animal.setName(name);
-        animal.setType(type);
-        animal.setAge(age);
-        animal.setPrice(price);
-        animal.setDescription(description);
-        animal.setImages(images);
+    // Méthode polymorphique pour créer un animal générique
+    public Animal createAnimal(Animal animal) {
         animal.setFarm(this);
         animal.setCreationDate(LocalDate.now());
         return animal;
+    }
+
+    // Méthode spécifique pour créer une vache
+    public Cow createCow(String name, Integer age, Float price, String description, Set<Image> images, Float milkPerDay) {
+        Cow cow = new Cow();
+        cow.setName(name);
+        cow.setAge(age);
+        cow.setPrice(price);
+        cow.setDescription(description);
+        cow.setImages(images);
+        cow.setMilkPerDay(milkPerDay != null ? milkPerDay : 20.0f);
+        cow.setFarm(this);
+        cow.setCreationDate(LocalDate.now());
+        return cow;
+    }
+
+    // Méthode spécifique pour créer un poulet
+    public Chicken createChicken(String name, Integer age, Float price, String description, Set<Image> images, Integer eggsPerWeek) {
+        Chicken chicken = new Chicken();
+        chicken.setName(name);
+        chicken.setAge(age);
+        chicken.setPrice(price);
+        chicken.setDescription(description);
+        chicken.setImages(images);
+        chicken.setEggsPerWeek(eggsPerWeek != null ? eggsPerWeek : 7);
+        chicken.setFarm(this);
+        chicken.setCreationDate(LocalDate.now());
+        return chicken;
     }
 
     public Event createEvent(String name, Float price, String description,
