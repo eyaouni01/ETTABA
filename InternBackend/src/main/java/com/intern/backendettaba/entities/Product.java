@@ -7,6 +7,7 @@ import com.intern.backendettaba.designpattern.ProductState.SeedState;
 import com.intern.backendettaba.enums.Etat;
 import com.intern.backendettaba.interfaces.RevenueStrategy;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -88,10 +89,27 @@ public class Product {
     public boolean canBeUpdated() {
         return this.getCurrentState().canUpdate();
     }
-    
+
     // Adding Low Coupling (grasp)
     public boolean canBeDeleted() {
         return this.getCurrentState().canDelete();
     }
 
+    /*
+     * contrainte OCL ici 👇
+     * context Produit
+     * inv PrixVenteSuperieurPrixAchatSiPret:
+     * self.etat = Etat::READY implies self.soldPrice > self.boughtPrice
+     * le produit pret ne dois pas etre vendu avec un prix < achat
+     */
+    @AssertTrue(message = "Pour un produit en état READY, le prix de vente doit être supérieur au prix d'achat.")
+    public boolean isSellingPriceValid() {
+        if (this.etat == Etat.READY) {
+            if (this.soldPrice == null || this.boughtPrice == null) {
+                return false;
+            }
+            return this.soldPrice > this.boughtPrice;
+        }
+        return true;
+    }
 }
