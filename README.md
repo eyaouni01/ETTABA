@@ -1,0 +1,1 @@
+Ce projet implémente un système de gestion de ferme avec une architecture orientée objet en appliquant les principes SOLID et les patterns de conception GRASP (General Responsibility Assignment Software Patterns) et GoF (Gang of Four). Le système permet de gérer différentes entités comme des feremes, événements, des "Ettabas"potager , des animaux et des produits.
