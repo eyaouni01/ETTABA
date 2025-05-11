@@ -1,5 +1,6 @@
 package com.intern.backendettaba.entities;
 
+import com.intern.backendettaba.designpattern.factory.AnimalFactory;
 import com.sun.tools.jconsole.JConsoleContext;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -58,17 +59,19 @@ public class Farm {
         return ettaba;
     }
 
-    public Animal createAnimal(String name, String type, Integer age, Float price, String description, Set<Image> images) {
-        Animal animal = new Animal();
-        animal.setName(name);
-        animal.setType(type);
-        animal.setAge(age);
-        animal.setPrice(price);
-        animal.setDescription(description);
-        animal.setImages(images);
-        animal.setFarm(this);
-        animal.setCreationDate(LocalDate.now());
-        return animal;
+     /**
+     * Create an animal using the Factory pattern
+     * This implements the GRASP Creator pattern
+     */
+    public Animal createAnimal(
+            AnimalFactory factory,
+            String name,
+            Integer age,
+            Float price,
+            String description,
+            Set<Image> images) {
+        
+        return factory.createAnimalForFarm(name, age, price, description, images, this);
     }
 
     public Event createEvent(String name, Float price, String description,
